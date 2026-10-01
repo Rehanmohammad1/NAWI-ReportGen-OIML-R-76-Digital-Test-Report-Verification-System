@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { Bell, LogOut, Building2, ChevronDown, Check } from 'lucide-react';
+import { IndianNationalEmblem } from './IndianNationalEmblem';
 
 interface HeaderProps {
   onToggleMobileMenu: () => void;
@@ -79,15 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
         
         {/* Left: Ashoka Pillar Emblem & Official Unified System Branding */}
         <div className="flex items-center space-x-3 shrink-0">
-          <svg className="w-9 h-11 text-[#24211D] shrink-0" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 30 5 L 34 14 L 43 14 L 36 20 L 39 29 L 30 23 L 21 29 L 24 20 L 17 14 L 26 14 Z" fill="currentColor" opacity="0.9" />
-            <rect x="20" y="32" width="20" height="24" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-            <circle cx="30" cy="44" r="7" stroke="currentColor" strokeWidth="1.5" />
-            <line x1="30" y1="37" x2="30" y2="51" stroke="currentColor" strokeWidth="1" />
-            <line x1="23" y1="44" x2="37" y2="44" stroke="currentColor" strokeWidth="1" />
-            <path d="M 12 60 Q 30 56 48 60 L 45 68 L 15 68 Z" fill="currentColor" opacity="0.85" />
-            <text x="30" y="76" fontSize="6" fontFamily="serif" fontWeight="bold" textAnchor="middle" fill="currentColor">Satyameva Jayate</text>
-          </svg>
+          <IndianNationalEmblem className="w-8.5 h-11 text-black shrink-0" />
 
           <div>
             <h1 className="font-serif-header font-bold text-lg sm:text-xl text-[#24211D] tracking-tight leading-tight">
