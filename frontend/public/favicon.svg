@@ -1,8 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 48 48">
-  <path d="M24 4L8 10V22C8 32.5 14.8 41.7 24 44C33.2 41.7 40 32.5 40 22V10L24 4Z" fill="#413B32" fill-opacity="0.9" stroke="#A7BABA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16 12H32M24 12V36M18 36H30" stroke="#F1EADE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 20L24 16L34 20" stroke="#F1EADE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 20V27M10 27H18L14 31L10 27Z" stroke="#A7BABA" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M34 20V27M30 27H38L34 31L30 27Z" stroke="#A7BABA" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="24" cy="16" r="2" fill="#F1EADE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <!-- Outer Regulatory Shield with NAWI Brand Fill -->
+  <path d="M24 4L8 10V22C8 32.5 14.8 41.7 24 44C33.2 41.7 40 32.5 40 22V10L24 4Z" fill="#9C5A3C" stroke="#7E442B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Inner Precision Grid Accent -->
+  <path d="M16 12H32M24 12V36M18 36H30" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Fulcrum & Balance Beam -->
+  <path d="M14 20L24 16L34 20" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Left Weighing Pan & Suspension -->
+  <path d="M14 20V27M10 27H18L14 31L10 27Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#FFFFFF" fill-opacity="0.3"/>
+  <!-- Right Weighing Pan & Suspension -->
+  <path d="M34 20V27M30 27H38L34 31L30 27Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#FFFFFF" fill-opacity="0.3"/>
+  <!-- Center Metrology Calibration Point -->
+  <circle cx="24" cy="16" r="2.25" fill="#FFFFFF"/>
 </svg>
