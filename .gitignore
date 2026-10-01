@@ -1,0 +1,37 @@
+# Environment files & Secrets
+.env
+*.env
+.env.*
+backend/.env
+frontend/.env
+
+# Virtual Environment
+venv/
+.venv/
+
+# Caches, Bytecode & Build Outputs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+dist/
+dist-ssr/
+frontend/dist/
+frontend/node_modules/
+node_modules/
+
+# Local SQLite Databases & Uploads
+*.db
+*.db.bak
+*.sqlite
+backend/uploads/
+backend/nawi_reports.db
+
+# Logs & Temporary Files
+*.log
+scratch/*.log
+
+# Editor & OS files
+.DS_Store
+.idea/
+.vscode/
+2nd title
