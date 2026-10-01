@@ -725,6 +725,115 @@ export const UsersPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Reset Passphrase Modal (Pass Button Action) */}
+      {resetPassUser && (
+        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono space-y-3 text-xs">
+            <h3 className="font-bold text-xs uppercase text-[#413B32] border-b border-[#D9D1C5] pb-2">
+              Reset Passphrase: {resetPassUser.name}
+            </h3>
+            <p className="text-[#413B32]/80">
+              Set a new secure password for account <span className="font-bold">{resetPassUser.email}</span>:
+            </p>
+            <form onSubmit={handleResetPassword} className="space-y-3">
+              <div>
+                <label className="block text-[#413B32]/70 mb-1">New Password</label>
+                <input
+                  required
+                  type="password"
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  placeholder="Minimum 6 characters"
+                  className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]"
+                />
+              </div>
+              <div>
+                <label className="block text-[#413B32]/70 mb-1">Confirm New Password</label>
+                <input
+                  required
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder="Re-enter new password"
+                  className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]"
+                />
+              </div>
+              {resetPassError && (
+                <p className="text-[10px] text-red-700 bg-red-50 border border-red-200 p-1.5 rounded-xs">
+                  {resetPassError}
+                </p>
+              )}
+              <div className="flex justify-end space-x-2 pt-2 border-t border-[#D9D1C5]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setResetPassUser(null);
+                    setNewPassword('');
+                    setConfirmPassword('');
+                    setResetPassError('');
+                  }}
+                  className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]"
+                >
+                  Update Passphrase
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toggle Active/Inactive Status Modal (Disable/Enable Button Action) */}
+      {toggleUser && (
+        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono space-y-3 text-xs">
+            <h3 className="font-bold text-xs uppercase text-[#413B32] border-b border-[#D9D1C5] pb-2">
+              {toggleUser.active ? 'Disable Account' : 'Enable Account'}: {toggleUser.name}
+            </h3>
+            <p className="text-[#413B32]/80">
+              Are you sure you want to {toggleUser.active ? 'deactivate' : 'reactivate'} the authority account for <span className="font-bold">{toggleUser.name}</span> ({toggleUser.email})?
+            </p>
+            {toggleUser.active ? (
+              <div className="bg-red-50 border border-red-200 text-red-900 p-2 rounded-xs text-[11px]">
+                <AlertCircle className="w-3.5 h-3.5 inline mr-1 text-red-700" />
+                Deactivating this user will prevent them from signing in or conducting evaluations until reactivated by an Administrator.
+              </div>
+            ) : (
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-2 rounded-xs text-[11px]">
+                <CheckCircle2 className="w-3.5 h-3.5 inline mr-1 text-emerald-700" />
+                Reactivating this user will grant them access according to their assigned role and laboratory.
+              </div>
+            )}
+            <div className="flex justify-end space-x-2 pt-2 border-t border-[#D9D1C5]">
+              <button
+                type="button"
+                onClick={() => setToggleUser(null)}
+                className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleToggleStatus}
+                className={`px-3.5 py-1 rounded-xs font-bold text-white border ${
+                  toggleUser.active
+                    ? 'bg-red-700 hover:bg-red-800 border-red-700'
+                    : 'bg-emerald-700 hover:bg-emerald-800 border-emerald-700'
+                }`}
+              >
+                {toggleUser.active ? 'Confirm Disable' : 'Confirm Enable'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+

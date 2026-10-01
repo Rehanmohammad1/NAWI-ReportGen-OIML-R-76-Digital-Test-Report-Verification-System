@@ -17,6 +17,8 @@ import { EquipmentPage } from './pages/EquipmentPage';
 import { VerifyPage } from './pages/VerifyPage';
 import { UsersPage } from './pages/UsersPage';
 
+import { ErrorBoundary } from './components/ErrorBoundary';
+
 const ProtectedLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
@@ -30,19 +32,21 @@ const ProtectedLayout: React.FC = () => {
       <div className="flex flex-1">
         <Sidebar />
         <main className="flex-1 p-6 overflow-y-auto">
-          <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/users" element={<UsersPage />} />
-            <Route path="/instruments" element={<InstrumentsPage />} />
-            <Route path="/sessions/new" element={<NewSessionPage />} />
-            <Route path="/sessions/:id" element={<SessionDetailPage />} />
-            <Route path="/review-queue" element={<ReviewQueuePage />} />
-            <Route path="/repository" element={<RepositoryPage />} />
-            <Route path="/rules" element={<RulesPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/equipment" element={<EquipmentPage />} />
-            <Route path="/verify-public" element={<VerifyPage />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/instruments" element={<InstrumentsPage />} />
+              <Route path="/sessions/new" element={<NewSessionPage />} />
+              <Route path="/sessions/:id" element={<SessionDetailPage />} />
+              <Route path="/review-queue" element={<ReviewQueuePage />} />
+              <Route path="/repository" element={<RepositoryPage />} />
+              <Route path="/rules" element={<RulesPage />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/equipment" element={<EquipmentPage />} />
+              <Route path="/verify-public" element={<VerifyPage />} />
+            </Routes>
+          </ErrorBoundary>
         </main>
       </div>
     </div>

@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../services/api';
+import { api, extractErrorMessage } from '../services/api';
 import type { RuleLimit } from '../types';
-import { BookOpen, ShieldAlert, Layers } from 'lucide-react';
+import { ShieldAlert, Layers, AlertCircle, RefreshCw } from 'lucide-react';
 
 export const RulesPage: React.FC = () => {
   const [limits, setLimits] = useState<RuleLimit[]>([]);
   const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchRulesData = () => {
+    setLoading(true);
+    setErrorMsg(null);
     Promise.all([api.getRuleVersions(), api.getRuleLimits()])
       .then(([vData, lData]) => {
-        setVersions(vData);
-        setLimits(lData);
+        setVersions(Array.isArray(vData) ? vData : []);
+        setLimits(Array.isArray(lData) ? lData : []);
       })
-      .catch(console.error)
+      .catch((err: any) => {
+        const msg = extractErrorMessage(err, 'Failed to load OIML rule engine data');
+        setErrorMsg(msg);
+      })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchRulesData();
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-xs font-mono text-[#413B32]/70">Loading Rule Engine configuration...</div>;
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-xs font-mono text-[#413B32]/70 bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm max-w-7xl mx-auto">
+        Loading OIML Rule Engine configuration...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
@@ -37,6 +53,24 @@ export const RulesPage: React.FC = () => {
           Decoupled regulatory rule engine storing MPE tables and scale interval bands as versioned database configuration.
         </p>
       </div>
+
+      {/* Error Notice if API failed */}
+      {errorMsg && (
+        <div className="bg-red-50 border border-red-300 text-red-900 p-4 rounded-xs text-xs space-y-2 font-mono">
+          <div className="flex items-center space-x-2 font-bold text-red-800">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <span>OIML RULE ENGINE DATA FETCH FAILURE</span>
+          </div>
+          <p>{errorMsg}</p>
+          <button
+            onClick={fetchRulesData}
+            className="bg-red-800 hover:bg-red-900 text-white font-bold px-3 py-1 rounded-xs transition inline-flex items-center space-x-1 mt-1"
+          >
+            <RefreshCw className="w-3 h-3" />
+            <span>Retry Loading Rules</span>
+          </button>
+        </div>
+      )}
 
       {/* Regulatory Constraint Warning Banner */}
       <div className="bg-amber-50 border border-amber-300 text-amber-950 p-3.5 rounded-xs text-xs space-y-1.5 font-mono">
@@ -58,20 +92,30 @@ export const RulesPage: React.FC = () => {
           <Layers className="w-3.5 h-3.5 text-[#413B32]" />
           <span>Official Regulatory Data Source & Provenance</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
-          {versions.map(v => (
-            <div key={v.id} className="bg-[#F1EADE]/40 border border-[#D9D1C5] p-3 rounded-xs space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-[#413B32]">{v.version_code}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-xs bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold">
-                  {v.status.toUpperCase()}
-                </span>
-              </div>
-              <p className="text-[11px] text-[#413B32]/80">{v.description}</p>
-              <p className="text-[10px] text-[#413B32]/60 pt-1">Source: {v.source_citation}</p>
-            </div>
-          ))}
-        </div>
+        {versions.length === 0 ? (
+          <p className="text-xs font-mono text-[#413B32]/60 py-2">No active rule versions found in configuration database.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+            {versions.map(v => {
+              const versionCode = v.version_code || v.edition_label || v.standard || `VERSION-${v.id}`;
+              const statusLabel = v.status ? String(v.status).toUpperCase() : (v.is_active ? 'ACTIVE' : 'INACTIVE');
+              const descriptionText = v.description || `Official Legal Metrology Regulatory Rule Version for ${v.standard || 'OIML R-76'}`;
+              const citationText = v.source_citation || v.source_document || 'OIML Recommendation R 76-1 (2006 E)';
+              return (
+                <div key={v.id} className="bg-[#F1EADE]/40 border border-[#D9D1C5] p-3 rounded-xs space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#413B32]">{versionCode}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-xs bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold">
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#413B32]/80">{descriptionText}</p>
+                  <p className="text-[10px] text-[#413B32]/60 pt-1">Source: {citationText}</p>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* MPE Table Configuration Register */}
@@ -92,18 +136,34 @@ export const RulesPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
-              {limits.map((rl) => (
-                <tr key={rl.id} className="hover:bg-[#F1EADE]/30 transition">
-                  <td className="p-2.5 font-mono font-bold text-[#413B32]">{rl.rule_code}</td>
-                  <td className="p-2.5 font-mono">Class {rl.accuracy_class}</td>
-                  <td className="p-2.5 font-mono text-[11px]">
-                    {rl.min_load_e} e ≤ m ≤ {rl.max_load_e} e
+              {limits.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-6 text-center text-xs text-[#413B32]/60 font-mono">
+                    No OIML rule limits available in database configuration.
                   </td>
-                  <td className="p-2.5 font-mono font-bold">±{rl.mpe_initial_e} e</td>
-                  <td className="p-2.5 font-mono">±{rl.mpe_inservice_e} e</td>
-                  <td className="p-2.5 font-mono text-[11px] uppercase">{rl.evaluation_type}</td>
                 </tr>
-              ))}
+              ) : (
+                limits.map((rl) => {
+                  const ruleCode = rl.rule_code || rl.test_procedure_code || `RULE-${rl.id}`;
+                  const minLoad = rl.min_load_e ?? rl.load_band_min_e ?? 0;
+                  const maxLoad = rl.max_load_e ?? rl.load_band_max_e ?? 0;
+                  const mpeInitial = rl.mpe_initial_e ?? rl.mpe_type_eval_e ?? 0;
+                  const mpeInservice = rl.mpe_inservice_e ?? rl.mpe_working_e ?? 0;
+                  const evalType = (rl.evaluation_type || rl.formula_ref || 'Standard MPE').toString();
+                  return (
+                    <tr key={rl.id} className="hover:bg-[#F1EADE]/30 transition">
+                      <td className="p-2.5 font-mono font-bold text-[#413B32]">{ruleCode}</td>
+                      <td className="p-2.5 font-mono">Class {rl.accuracy_class}</td>
+                      <td className="p-2.5 font-mono text-[11px]">
+                        {minLoad} e ≤ m ≤ {maxLoad} e
+                      </td>
+                      <td className="p-2.5 font-mono font-bold">±{mpeInitial} e</td>
+                      <td className="p-2.5 font-mono">±{mpeInservice} e</td>
+                      <td className="p-2.5 font-mono text-[11px] uppercase">{evalType}</td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
