@@ -50,6 +50,44 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   return res.json();
 }
 
+export async function downloadAuthenticatedFile(endpoint: string, fallbackFilename: string): Promise<void> {
+  const token = localStorage.getItem('nawi_token');
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: 'GET',
+    headers,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: `HTTP Error ${res.status}` }));
+    const msg = extractErrorMessage(errorData, `HTTP Error ${res.status}`);
+    throw new Error(msg);
+  }
+
+  let filename = fallbackFilename;
+  const disposition = res.headers.get('Content-Disposition');
+  if (disposition && disposition.includes('filename=')) {
+    const match = disposition.match(/filename="?([^";]+)"?/);
+    if (match && match[1]) {
+      filename = match[1];
+    }
+  }
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
 export const api = {
   // Auth
   login: (data: any) => fetchApi('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
@@ -80,6 +118,10 @@ export const api = {
   getReportDocxUrl: (reportId: number) => `${API_BASE_URL}/reports/${reportId}/download/docx`,
   getReportCsvUrl: () => `${API_BASE_URL}/reports/export/csv`,
   getReportJsonUrl: (reportId: number) => `${API_BASE_URL}/reports/${reportId}/export/json`,
+  downloadReportPdf: (reportId: number) => downloadAuthenticatedFile(`/reports/${reportId}/download/pdf`, `NAWI-Report-${reportId}.pdf`),
+  downloadReportDocx: (reportId: number) => downloadAuthenticatedFile(`/reports/${reportId}/download/docx`, `NAWI-Report-${reportId}.docx`),
+  downloadReportCsv: () => downloadAuthenticatedFile('/reports/export/csv', 'NAWI_Reports_Repository.csv'),
+  downloadReportJson: (reportId: number) => downloadAuthenticatedFile(`/reports/${reportId}/export/json`, `NAWI-Report-${reportId}.json`),
 
   // Rules
   getRuleVersions: () => fetchApi('/rules/versions'),
@@ -134,4 +176,6 @@ export const api = {
   },
   deleteEvidence: (sessionId: number, evidenceId: number) => fetchApi(`/sessions/${sessionId}/evidence/${evidenceId}`, { method: 'DELETE' }),
   getEvidenceDownloadUrl: (sessionId: number, evidenceId: number) => `${API_BASE_URL}/sessions/${sessionId}/evidence/${evidenceId}/download`,
+  downloadEvidenceFile: (sessionId: number, evidenceId: number, fallbackName?: string) => downloadAuthenticatedFile(`/sessions/${sessionId}/evidence/${evidenceId}/download`, fallbackName || `Evidence-${evidenceId}`),
 };
+

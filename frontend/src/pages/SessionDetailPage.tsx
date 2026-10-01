@@ -553,14 +553,18 @@ export const SessionDetailPage: React.FC = () => {
                     <td className="p-2 text-[#413B32]/80">{ev.description || 'Session Photograph / Technical Document'}</td>
                     <td className="p-2 text-[#413B32]/70">{ev.uploaded_at ? new Date(ev.uploaded_at).toLocaleString() : 'N/A'}</td>
                     <td className="p-2 text-right space-x-2">
-                      <a
-                        href={api.getEvidenceDownloadUrl(session.id, ev.id)}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.downloadEvidenceFile(session.id, ev.id, ev.file_name);
+                          } catch (err: any) {
+                            alert(err.message || 'Evidence download failed');
+                          }
+                        }}
                         className="inline-flex items-center gap-1 text-[10px] font-bold text-[#413B32] underline hover:text-[#413B32]/80"
                       >
                         <Download className="w-3 h-3" /> DOWNLOAD / VIEW
-                      </a>
+                      </button>
                       {!isFinalized && (
                         <button
                           onClick={() => handleDeleteEvidence(ev.id)}

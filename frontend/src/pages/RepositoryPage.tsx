@@ -51,13 +51,19 @@ export const RepositoryPage: React.FC = () => {
         </div>
 
         <div>
-          <a
-            href={api.getReportCsvUrl()}
+          <button
+            onClick={async () => {
+              try {
+                await api.downloadReportCsv();
+              } catch (err: any) {
+                alert(err.message || 'Failed to download CSV export');
+              }
+            }}
             className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] font-mono text-xs px-3.5 py-1.5 rounded-xs transition inline-flex items-center space-x-1.5 border border-[#413B32]"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-[#A7BABA]" />
             <span>Export Register (CSV)</span>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -157,31 +163,47 @@ export const RepositoryPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="p-2.5 text-right space-x-1 font-mono">
-                      <a
-                        href={api.getReportPdfUrl(r.session_id)}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.downloadReportPdf(r.id);
+                          } catch (err: any) {
+                            alert(err.message || 'PDF Download failed');
+                          }
+                        }}
                         className="bg-red-50 hover:bg-red-100 text-red-900 border border-red-200 px-2 py-0.5 rounded-xs text-[10px] font-semibold inline-flex items-center space-x-1"
                       >
                         <Download className="w-3 h-3 text-red-700" />
                         <span>PDF</span>
-                      </a>
-                      <a
-                        href={api.getReportDocxUrl(r.session_id)}
-                        target="_blank"
-                        rel="noreferrer"
+                      </button>
+
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.downloadReportDocx(r.id);
+                          } catch (err: any) {
+                            alert(err.message || 'DOCX Download failed');
+                          }
+                        }}
                         className="bg-[#F1EADE] hover:bg-[#D9D1C5]/50 text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-semibold inline-flex items-center space-x-1"
                       >
                         <Download className="w-3 h-3 text-[#413B32]" />
                         <span>DOCX</span>
-                      </a>
-                      <a
-                        href={api.getReportJsonUrl(r.id)}
+                      </button>
+
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.downloadReportJson(r.id);
+                          } catch (err: any) {
+                            alert(err.message || 'JSON Export failed');
+                          }
+                        }}
                         className="bg-[#FFFFFF] hover:bg-[#F1EADE]/50 text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-semibold inline-flex items-center space-x-1"
                       >
                         <Code className="w-3 h-3 text-[#413B32]" />
                         <span>JSON</span>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))

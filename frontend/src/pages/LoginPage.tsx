@@ -162,7 +162,7 @@ export const LoginPage: React.FC = () => {
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setEmail(e.target.value); setError(''); setSuccessMsg(''); }}
                     className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs px-3 py-1.5 text-xs text-[#413B32] focus:outline-none focus:border-[#413B32]"
                   />
                 </div>
@@ -173,7 +173,7 @@ export const LoginPage: React.FC = () => {
                     type="password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value); setError(''); setSuccessMsg(''); }}
                     className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs px-3 py-1.5 text-xs text-[#413B32] focus:outline-none focus:border-[#413B32]"
                   />
                 </div>
