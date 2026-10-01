@@ -11,7 +11,8 @@ VALID_ROLES = {"admin", "lab_manager", "inspector", "reviewer"}
 
 @router.post("/login", response_model=TokenResponse)
 def login(login_data: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == login_data.email).first()
+    clean_email = login_data.email.strip().lower()
+    user = db.query(User).filter(User.email == clean_email).first()
     if not user or not verify_password(login_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
