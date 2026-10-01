@@ -5,7 +5,7 @@ import { ShieldCheck, AlertCircle, CheckCircle, Search, Lock, CheckCircle2 } fro
 
 export const VerifyPage: React.FC = () => {
   const { reportNumber: paramReportNum } = useParams<{ reportNumber?: string }>();
-  const [reportNumInput, setReportNumInput] = useState(paramReportNum || 'NAWI-R76-2026-DEMO-001');
+  const [reportNumInput, setReportNumInput] = useState(paramReportNum || 'NAWI-R76-2026-0001');
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +58,7 @@ export const VerifyPage: React.FC = () => {
               <Search className="w-3.5 h-3.5 text-[#413B32]/50 absolute left-3 top-3" />
               <input
                 type="text"
-                placeholder="Enter Certificate No. (e.g. NAWI-R76-2026-DEMO-001)"
+                placeholder="Enter Certificate No. (e.g. NAWI-R76-2026-0001)"
                 value={reportNumInput}
                 onChange={e => setReportNumInput(e.target.value)}
                 className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs pl-9 pr-3 py-2 text-xs text-[#413B32] focus:outline-none focus:border-[#413B32]"

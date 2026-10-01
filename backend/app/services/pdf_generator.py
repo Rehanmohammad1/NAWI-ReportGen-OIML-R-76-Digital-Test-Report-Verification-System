@@ -82,10 +82,6 @@ def generate_pdf_report(session_data: dict, output_path: str) -> str:
     is_demo = session_data.get("is_demo_data", False)
     report_num = session_data.get("report_number", "NAWI-R76-DRAFT")
 
-    if is_demo:
-        story.append(Paragraph("<font color='#DC2626'><b>*** DEMO DATA — FOR TESTING AND EVALUATION PURPOSES ONLY ***</b></font>", subtitle_style))
-        story.append(Spacer(1, 4))
-
     story.append(Paragraph("MINISTRY OF CONSUMER AFFAIRS, FOOD & PUBLIC DISTRIBUTION", subtitle_style))
     story.append(Paragraph("DEPARTMENT OF LEGAL METROLOGY — GOVERNMENT OF INDIA", subtitle_style))
     story.append(Spacer(1, 6))

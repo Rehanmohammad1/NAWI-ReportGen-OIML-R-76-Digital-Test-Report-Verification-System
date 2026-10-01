@@ -32,14 +32,6 @@ def generate_docx_report(session_data: dict, output_path: str) -> str:
     report_num = session_data.get("report_number", "NAWI-R76-DRAFT")
 
     # Header
-    if is_demo:
-        p_demo = doc.add_paragraph()
-        p_demo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run_demo = p_demo.add_run("*** DEMO DATA — FOR TESTING AND EVALUATION PURPOSES ONLY ***")
-        run_demo.bold = True
-        run_demo.font.color.rgb = RGBColor(220, 38, 38)
-        run_demo.font.size = Pt(10)
-
     p_gov = doc.add_paragraph()
     p_gov.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_gov = p_gov.add_run("MINISTRY OF CONSUMER AFFAIRS, FOOD & PUBLIC DISTRIBUTION\nDEPARTMENT OF LEGAL METROLOGY — GOVERNMENT OF INDIA")

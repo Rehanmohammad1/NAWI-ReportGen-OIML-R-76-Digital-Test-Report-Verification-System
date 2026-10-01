@@ -202,7 +202,7 @@ export const LoginPage: React.FC = () => {
               {/* Quick Role Switcher */}
               <div className="mt-4 border-t border-[#D9D1C5] pt-3 font-mono">
                 <p className="text-[10px] text-[#413B32]/70 uppercase tracking-wider mb-2 font-bold text-center">
-                  Quick Demo Login Accounts:
+                  System Evaluation Role Accounts:
                 </p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {quickLogins.map((ql) => (

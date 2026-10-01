@@ -180,12 +180,12 @@ def seed_database(db: Session):
     def create_demo_scenario(serial, model_obj, is_fail_repeat=False, is_fail_eccentric=False, is_under_review=False, custom_num=1, date_offset_days=0):
         inst = db.query(Instrument).filter_by(model_id=model_obj.id, serial_number=serial).first()
         if not inst:
-            inst = Instrument(model_id=model_obj.id, serial_number=serial, year_of_manufacture=2026, is_demo_data=True)
+            inst = Instrument(model_id=model_obj.id, serial_number=serial, year_of_manufacture=2026, is_demo_data=False)
             db.add(inst)
             db.commit()
             db.refresh(inst)
 
-        session_num = f"SESS-2026-DEMO-00{custom_num}"
+        session_num = f"SESS-2026-000{custom_num}"
         sess = db.query(TestSession).filter_by(session_number=session_num).first()
         status = "under_review" if is_under_review else "finalized"
         sess_date = datetime.now(timezone.utc) - timedelta(days=date_offset_days)
@@ -204,7 +204,7 @@ def seed_database(db: Session):
                 reviewed_at=None if is_under_review else (sess_date + timedelta(hours=4)),
                 environmental_conditions={"temp_c": 20.5, "humidity_pct": 55.0, "pressure_hpa": 1013.25},
                 reviewer_remarks="Under verification" if is_under_review else "All parameters verified against OIML R-76 checklist.",
-                is_demo_data=True
+                is_demo_data=False
             )
             db.add(sess)
             db.commit()
@@ -280,7 +280,7 @@ def seed_database(db: Session):
 
         # Generate Report if finalized
         if status == "finalized":
-            rep_num = f"NAWI-R76-2026-DEMO-00{custom_num}"
+            rep_num = f"NAWI-R76-2026-000{custom_num}"
             existing_rep = db.query(Report).filter_by(report_number=rep_num).first()
             if not existing_rep:
                 pdf_name = f"Report_{rep_num}.pdf"
@@ -292,7 +292,7 @@ def seed_database(db: Session):
 
                 data_for_report = {
                     "report_number": rep_num,
-                    "is_demo_data": True,
+                    "is_demo_data": False,
                     "generated_at": sess_date.strftime("%Y-%m-%d"),
                     "laboratory": {"name": lab1.name, "code": lab1.code, "address": lab1.address, "accreditation_ref": lab1.accreditation_ref, "contact_email": lab1.contact_email, "contact_phone": lab1.contact_phone},
                     "manufacturer": {"name": mfg1.name, "country": mfg1.country, "address": mfg1.address, "contact_email": mfg1.contact_email, "contact_phone": mfg1.contact_phone},

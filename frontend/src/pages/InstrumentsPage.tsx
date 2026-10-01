@@ -260,7 +260,7 @@ export const InstrumentsPage: React.FC = () => {
                   <td className="p-2.5 font-mono">
                     {inst.is_demo_data ? (
                       <span className="bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-bold">
-                        DEMO DATA
+                        SYSTEM SEED
                       </span>
                     ) : (
                       <span className="bg-emerald-50 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
