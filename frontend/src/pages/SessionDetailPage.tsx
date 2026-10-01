@@ -197,24 +197,32 @@ export const SessionDetailPage: React.FC = () => {
 
           {session.report && (
             <div className="flex space-x-1.5">
-              <a
-                href={api.getReportPdfUrl(session.id)}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#C54B4B] border border-[#C54B4B] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
+              <button
+                onClick={async () => {
+                  try {
+                    await api.downloadReportPdf(session.report.id || session.id);
+                  } catch (err: any) {
+                    alert(err.message || 'PDF Download failed');
+                  }
+                }}
+                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#C54B4B] border border-[#C54B4B] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5 text-[#C54B4B]" />
                 <span>PDF</span>
-              </a>
-              <a
-                href={api.getReportDocxUrl(session.id)}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#25221F] border border-[#E6E2DC] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    await api.downloadReportDocx(session.report.id || session.id);
+                  } catch (err: any) {
+                    alert(err.message || 'DOCX Download failed');
+                  }
+                }}
+                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#25221F] border border-[#E6E2DC] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5 text-[#25221F]" />
                 <span>DOCX</span>
-              </a>
+              </button>
             </div>
           )}
         </div>
