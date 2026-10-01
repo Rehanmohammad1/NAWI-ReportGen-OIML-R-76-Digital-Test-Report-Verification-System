@@ -15,13 +15,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('nawi_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('nawi_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      localStorage.removeItem('nawi_user');
+      return null;
+    }
   });
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('nawi_token'));
 
   const login = async (email: string, pass: string) => {
     const res = await api.login({ email, password: pass });
+    if (!res || !res.access_token || !res.user) {
+      throw new Error('Invalid authentication response received from backend');
+    }
     setToken(res.access_token);
     setUser(res.user);
     localStorage.setItem('nawi_token', res.access_token);
@@ -41,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user, hasRole }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user && !!token, hasRole }}>
       {children}
     </AuthContext.Provider>
   );

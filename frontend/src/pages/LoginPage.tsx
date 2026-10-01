@@ -46,6 +46,7 @@ export const LoginPage: React.FC = () => {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setError('');
     setSuccessMsg('');
     setLoading(true);
@@ -53,7 +54,8 @@ export const LoginPage: React.FC = () => {
       await login(email, password);
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Incorrect email or password');
+      const errMsg = typeof err === 'string' ? err : (err?.message || 'Incorrect email or password');
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
