@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { NawiLogo } from '../components/NawiLogo';
 import { TechnicalSketchBg } from '../components/TechnicalSketchBg';
-import { Shield, UserCheck, AlertCircle, CheckCircle2, UserPlus, LogIn, Scale, Building2, KeyRound } from 'lucide-react';
+import { AlertCircle, CheckCircle2, UserPlus, LogIn } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { login, isAuthenticated } = useAuth();
@@ -39,8 +39,10 @@ export const LoginPage: React.FC = () => {
   useEffect(() => {
     api.getPublicLaboratories()
       .then(labs => {
-        setLaboratories(labs);
-        if (labs.length > 0) setRegLabId(String(labs[0].id));
+        if (Array.isArray(labs) && labs.length > 0) {
+          setLaboratories(labs);
+          setRegLabId(String(labs[0].id));
+        }
       })
       .catch(console.error);
   }, []);
@@ -114,30 +116,33 @@ export const LoginPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6] text-[#25221F] flex flex-col justify-between p-4 md:p-8 font-sans tech-grid-bg relative overflow-hidden">
-      <TechnicalSketchBg className="absolute inset-0 max-w-4xl mx-auto my-auto" />
-      {/* Top institutional banner */}
-      <div className="max-w-md w-full mx-auto text-center pt-4">
-        <div className="inline-flex items-center justify-center p-3 rounded-xl bg-white border border-[#E6E2DC] shadow-sm mb-4">
-          <NawiLogo className="w-10 h-10 text-[#C87A57]" />
+    <div className="min-h-screen bg-[#EBE5DC] text-[#24211D] flex flex-col justify-between p-4 md:p-8 font-sans tech-grid-bg relative overflow-hidden">
+      
+      {/* Background Metrology Technical Drawing (Layered safely behind page content) */}
+      <TechnicalSketchBg className="absolute inset-0 max-w-4xl mx-auto my-auto opacity-[0.045] pointer-events-none z-0" />
+
+      {/* Top Institutional Branding */}
+      <div className="max-w-md w-full mx-auto text-center pt-4 relative z-10">
+        <div className="inline-flex items-center justify-center p-3 rounded-xl bg-white border border-[#E2DDD5] shadow-sm mb-4">
+          <NawiLogo className="w-10 h-10 text-[#9C5A3C]" />
         </div>
-        <h1 className="font-serif-header text-2xl md:text-3xl font-bold text-[#25221F] tracking-tight">
-          NAWI Digital Verification System
+        <h1 className="font-serif-header text-2xl md:text-3xl font-bold text-[#24211D] tracking-tight">
+          NAWI TEST REPORTING SYSTEM
         </h1>
-        <p className="text-xs text-[#666059] mt-1 font-medium">
-          OIML R-76 Legal Metrology Digital Test Report & Verification Portal
+        <p className="text-xs font-mono text-[#8C8275] tracking-widest uppercase mt-1">
+          Legal Metrology &bull; OIML R-76
         </p>
-        <div className="inline-block mt-2 bg-[#FAF6F0] text-[#554F47] text-[11px] px-3 py-1 rounded-full border border-[#E6E2DC] font-medium">
+        <div className="inline-block mt-2 bg-[#FAF7F2] text-[#5C554E] text-[11px] px-3.5 py-1 rounded-full border border-[#E2DDD5] font-medium shadow-2xs">
           Department of Consumer Affairs (DoCA), Govt. of India
         </div>
       </div>
 
-      {/* Main Form Box */}
-      <div className="max-w-md w-full mx-auto my-6">
-        <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 md:p-8 shadow-sm space-y-5">
+      {/* Main Authentication Card */}
+      <div className="max-w-md w-full mx-auto my-6 relative z-10">
+        <div className="bg-white border border-[#E2DDD5] rounded-2xl p-6 md:p-8 shadow-xl space-y-5 opacity-100">
           {successMsg && (
-            <div className="bg-[#EBF5F1] border border-[#BDE3D5] text-[#2D5A4B] p-3.5 rounded-lg text-xs flex items-start space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 text-[#3E7B66] mt-0.5 flex-shrink-0" />
+            <div className="bg-[#E2F4EA] border border-[#BDE3D5] text-[#2D5A4B] p-3.5 rounded-lg text-xs flex items-start space-x-2.5">
+              <CheckCircle2 className="w-4 h-4 text-[#2D5A4B] mt-0.5 flex-shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
@@ -152,56 +157,56 @@ export const LoginPage: React.FC = () => {
           {/* Mode 1: LOGIN */}
           {mode === 'login' ? (
             <div>
-              <div className="flex items-center justify-between border-b border-[#E6E2DC] pb-3 mb-4">
-                <h2 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center space-x-2">
-                  <LogIn className="w-4 h-4 text-[#C87A57]" />
+              <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-3 mb-4">
+                <h2 className="text-sm font-bold font-serif-header text-[#24211D] flex items-center space-x-2">
+                  <LogIn className="w-4 h-4 text-[#9C5A3C]" />
                   <span>Authority Account Sign In</span>
                 </h2>
-                <span className="text-[10px] font-mono text-[#666059] uppercase tracking-wider bg-[#F9F8F6] px-2 py-0.5 rounded border border-[#E6E2DC]">
-                  Secure Authentication
+                <span className="text-[10px] font-mono text-[#8C8275] uppercase tracking-wider bg-[#FAF7F2] px-2 py-0.5 rounded border border-[#E2DDD5]">
+                  Secure Auth
                 </span>
               </div>
 
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-[#25221F] mb-1.5">Official Email Address</label>
+                  <label className="block text-xs font-semibold text-[#24211D] mb-1.5">Official Email Address</label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => { setEmail(e.target.value); setError(''); setSuccessMsg(''); }}
-                    className="w-full bg-white border border-[#E6E2DC] rounded-md px-3.5 py-2 text-xs text-[#25221F] focus:outline-none focus:border-[#C87A57] focus:ring-1 focus:ring-[#C87A57] transition"
+                    className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg px-3.5 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#9C5A3C] focus:bg-white focus:ring-1 focus:ring-[#9C5A3C] transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#25221F] mb-1.5">Password</label>
+                  <label className="block text-xs font-semibold text-[#24211D] mb-1.5">Password</label>
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => { setPassword(e.target.value); setError(''); setSuccessMsg(''); }}
-                    className="w-full bg-white border border-[#E6E2DC] rounded-md px-3.5 py-2 text-xs text-[#25221F] focus:outline-none focus:border-[#C87A57] focus:ring-1 focus:ring-[#C87A57] transition"
+                    className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg px-3.5 py-2.5 text-xs text-[#24211D] focus:outline-none focus:border-[#9C5A3C] focus:bg-white focus:ring-1 focus:ring-[#9C5A3C] transition"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#C87A57] hover:bg-[#B36846] text-white font-medium py-2.5 px-4 rounded-md text-xs transition shadow-xs mt-2"
+                  className="w-full bg-[#9C5A3C] hover:bg-[#864B30] text-white font-semibold py-2.5 px-4 rounded-lg text-xs transition shadow-xs mt-2"
                 >
-                  {loading ? 'Authenticating...' : 'Sign In to Portal'}
+                  {loading ? 'Authenticating Workspace...' : 'Sign In to Portal'}
                 </button>
               </form>
 
               {/* Registration Prompt Link */}
-              <div className="mt-4 pt-3 border-t border-[#E6E2DC] text-center">
-                <p className="text-xs text-[#666059]">
+              <div className="mt-4 pt-3 border-t border-[#E2DDD5] text-center">
+                <p className="text-xs text-[#6B6359]">
                   Don't have an authority account?{' '}
                   <button
                     type="button"
                     onClick={() => { setMode('register'); setError(''); setSuccessMsg(''); }}
-                    className="text-[#C87A57] font-semibold hover:underline"
+                    className="text-[#9C5A3C] font-semibold hover:underline"
                   >
                     Register / Create Account
                   </button>
@@ -209,8 +214,8 @@ export const LoginPage: React.FC = () => {
               </div>
 
               {/* Quick Role Switcher */}
-              <div className="mt-5 border-t border-[#E6E2DC] pt-4">
-                <p className="text-[11px] text-[#666059] uppercase tracking-wider mb-2 font-medium text-center">
+              <div className="mt-5 border-t border-[#E2DDD5] pt-4">
+                <p className="text-[11px] text-[#6B6359] uppercase tracking-wider mb-2 font-mono text-center">
                   Evaluation Accounts Quick Access:
                 </p>
                 <div className="grid grid-cols-2 gap-2">
@@ -222,7 +227,7 @@ export const LoginPage: React.FC = () => {
                         setEmail(ql.email);
                         setPassword(ql.pass);
                       }}
-                      className="text-[11px] p-2 rounded-md border border-[#E6E2DC] bg-[#FAF6F0]/60 hover:bg-[#FAF6F0] text-[#25221F] font-medium text-center transition"
+                      className="text-[11px] p-2 rounded-lg border border-[#E2DDD5] bg-[#FAF7F2] hover:bg-[#EFEAE2] text-[#24211D] font-medium text-center transition"
                     >
                       <span>{ql.role}</span>
                     </button>
@@ -233,80 +238,80 @@ export const LoginPage: React.FC = () => {
           ) : (
             /* Mode 2: REGISTER */
             <div>
-              <div className="flex items-center justify-between border-b border-[#E6E2DC] pb-3 mb-4">
-                <h2 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center space-x-2">
-                  <UserPlus className="w-4 h-4 text-[#C87A57]" />
-                  <span>Authority Account Registration</span>
+              <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-3 mb-4">
+                <h2 className="text-sm font-bold font-serif-header text-[#24211D] flex items-center space-x-2">
+                  <UserPlus className="w-4 h-4 text-[#9C5A3C]" />
+                  <span>Authority Registration</span>
                 </h2>
                 <button
                   type="button"
                   onClick={() => setMode('login')}
-                  className="text-xs font-medium text-[#C87A57] hover:underline"
+                  className="text-xs font-semibold text-[#9C5A3C] hover:underline"
                 >
                   ← Back to Sign In
                 </button>
               </div>
 
               {regErrors.api && (
-                <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-3 rounded-md text-xs mb-3">
+                <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-3 rounded-lg text-xs mb-3">
                   {regErrors.api}
                 </div>
               )}
 
               <form onSubmit={handleRegisterSubmit} className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-[#25221F] mb-1 font-medium">Full Name</label>
+                  <label className="block text-[#24211D] mb-1 font-semibold">Full Name</label>
                   <input
                     type="text"
                     required
                     value={regName}
                     onChange={e => setRegName(e.target.value)}
-                    className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                    className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                   />
                   {regErrors.name && <p className="text-[10px] text-[#C54B4B] mt-0.5">{regErrors.name}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-[#25221F] mb-1 font-medium">Official Email</label>
+                  <label className="block text-[#24211D] mb-1 font-semibold">Official Email</label>
                   <input
                     type="email"
                     required
                     value={regEmail}
                     onChange={e => setRegEmail(e.target.value)}
-                    className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                    className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                   />
                   {regErrors.email && <p className="text-[10px] text-[#C54B4B] mt-0.5">{regErrors.email}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-[#25221F] mb-1 font-medium">Password</label>
+                    <label className="block text-[#24211D] mb-1 font-semibold">Password</label>
                     <input
                       type="password"
                       required
                       value={regPassword}
                       onChange={e => setRegPassword(e.target.value)}
-                      className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                      className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[#25221F] mb-1 font-medium">Confirm Password</label>
+                    <label className="block text-[#24211D] mb-1 font-semibold">Confirm Password</label>
                     <input
                       type="password"
                       required
                       value={regConfirmPassword}
                       onChange={e => setRegConfirmPassword(e.target.value)}
-                      className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                      className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[#25221F] mb-1 font-medium">Requested Authority Role</label>
+                  <label className="block text-[#24211D] mb-1 font-semibold">Requested Authority Role</label>
                   <select
                     value={regRole}
                     onChange={e => setRegRole(e.target.value)}
-                    className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                    className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                   >
                     <option value="inspector">Inspector / Tester</option>
                     <option value="reviewer">Reviewer / Approver</option>
@@ -317,11 +322,11 @@ export const LoginPage: React.FC = () => {
 
                 {regRole !== 'admin' && (
                   <div>
-                    <label className="block text-[#25221F] mb-1 font-medium">Assigned Laboratory</label>
+                    <label className="block text-[#24211D] mb-1 font-semibold">Assigned Laboratory</label>
                     <select
                       value={regLabId}
                       onChange={e => setRegLabId(e.target.value)}
-                      className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
+                      className="w-full bg-[#FAF7F2] border border-[#E2DDD5] rounded-lg p-2 text-[#24211D] focus:outline-none focus:border-[#9C5A3C]"
                     >
                       {laboratories.map(lab => (
                         <option key={lab.id} value={lab.id}>{lab.name} ({lab.code})</option>
@@ -333,7 +338,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#C87A57] hover:bg-[#B36846] text-white font-medium py-2.5 px-4 rounded-md text-xs transition shadow-xs mt-3"
+                  className="w-full bg-[#9C5A3C] hover:bg-[#864B30] text-white font-semibold py-2.5 px-4 rounded-lg text-xs transition shadow-xs mt-3"
                 >
                   {loading ? 'Submitting Registration...' : 'Submit Registration for Approval'}
                 </button>
@@ -344,10 +349,9 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <div className="text-center text-xs text-[#666059] font-mono pb-2">
-        <span>OIML R-76 Edition 2006 (E) Legal Metrology Regulatory Platform</span>
+      <div className="text-center text-xs text-[#8C8275] font-mono pb-2 relative z-10">
+        <span>Legal Metrology &bull; OIML R-76 Regulatory Platform</span>
       </div>
     </div>
   );
 };
-

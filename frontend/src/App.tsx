@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
+import { WorkspaceInitScreen } from './components/WorkspaceInitScreen';
 
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -20,19 +21,33 @@ import { UsersPage } from './pages/UsersPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const ProtectedLayout: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const [initializing, setInitializing] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const timer = setTimeout(() => {
+        setInitializing(false);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, user?.id]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
+  if (initializing) {
+    return <WorkspaceInitScreen />;
+  }
+
   return (
-    <div className="min-h-screen bg-[#F9F8F6] text-[#25221F] flex flex-col font-sans tech-grid-bg relative">
+    <div className="min-h-screen bg-[#EBE5DC] text-[#24211D] flex flex-col font-sans tech-grid-bg relative">
       <Header onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)} />
       <div className="flex flex-1 relative overflow-hidden">
         <Sidebar mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
-        <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 overflow-y-auto">
+        <main className="flex-1 w-full max-w-[1600px] mx-auto p-4 md:p-6 overflow-y-auto">
           <ErrorBoundary>
             <Routes>
               <Route path="/" element={<DashboardPage />} />

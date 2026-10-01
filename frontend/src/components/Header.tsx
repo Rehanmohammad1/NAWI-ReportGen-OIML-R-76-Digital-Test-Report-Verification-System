@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Bell, LogOut, Building2, ChevronDown } from 'lucide-react';
+import { Bell, LogOut, Building2, ChevronDown, Check } from 'lucide-react';
 
 interface HeaderProps {
   onToggleMobileMenu: () => void;
@@ -12,12 +12,26 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  
+  // Laboratory selector state
+  const [selectedLab, setSelectedLab] = useState<string>(user?.lab_name || 'Delhi Central Legal Metrology Laboratory');
+  const [showLabDropdown, setShowLabDropdown] = useState(false);
+  const [laboratories, setLaboratories] = useState<any[]>([]);
+
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (user) {
       api.getNotifications()
         .then(data => setNotifications(data))
+        .catch(() => {});
+
+      api.getPublicLaboratories()
+        .then(labs => {
+          if (Array.isArray(labs) && labs.length > 0) {
+            setLaboratories(labs);
+          }
+        })
         .catch(() => {});
     }
   }, [user]);
@@ -27,6 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
         setShowNotifications(false);
         setShowUserMenu(false);
+        setShowLabDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -52,13 +67,18 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
     hour12: true
   });
 
+  const availableLabs = laboratories.length > 0 ? laboratories : [
+    { id: 1, name: 'Delhi Central Legal Metrology Laboratory', code: 'DEL-01' },
+    { id: 2, name: 'Mumbai Regional Metrology Laboratory', code: 'MUM-02' },
+    { id: 3, name: 'Kolkata Metrology Testing Center', code: 'KOL-03' }
+  ];
+
   return (
     <header className="bg-[#FAF7F2] text-[#24211D] border-b border-[#E2DDD5] sticky top-0 z-40 shadow-xs font-sans" ref={headerRef}>
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
-        {/* Left: Ashoka Pillar Emblem & System Authority Branding */}
+        {/* Left: Ashoka Pillar Emblem & Official Unified System Branding */}
         <div className="flex items-center space-x-3 shrink-0">
-          {/* Ashoka Pillar State Emblem SVG */}
           <svg className="w-9 h-11 text-[#24211D] shrink-0" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M 30 5 L 34 14 L 43 14 L 36 20 L 39 29 L 30 23 L 21 29 L 24 20 L 17 14 L 26 14 Z" fill="currentColor" opacity="0.9" />
             <rect x="20" y="32" width="20" height="24" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -70,14 +90,11 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
           </svg>
 
           <div>
-            <h1 className="font-serif-header font-bold text-xl sm:text-2xl text-[#24211D] tracking-tight leading-tight">
-              SIH26035
-            </h1>
-            <p className="text-[11px] font-sans font-bold tracking-wider text-[#5C554E] uppercase leading-none mt-0.5">
+            <h1 className="font-serif-header font-bold text-lg sm:text-xl text-[#24211D] tracking-tight leading-tight">
               NAWI TEST REPORTING SYSTEM
-            </p>
-            <p className="text-[9px] font-mono text-[#8C8275] tracking-widest uppercase mt-0.5">
-              OIML R-76 &bull; LEGAL METROLOGY
+            </h1>
+            <p className="text-[10px] font-mono text-[#8C8275] tracking-wider uppercase mt-0.5 font-semibold">
+              Legal Metrology &bull; OIML R-76
             </p>
           </div>
         </div>
@@ -109,15 +126,13 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
 
           {/* Official OIML Oval Seal SVG */}
           <div className="flex items-center space-x-1 shrink-0 border-l border-[#E2DDD5] pl-6">
-            <svg className="w-12 h-12 text-[#24211D]" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-11 h-11 text-[#24211D]" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="30" cy="30" rx="26" ry="24" stroke="currentColor" strokeWidth="1.5" />
               <ellipse cx="30" cy="30" rx="22" ry="20" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 2" />
-              {/* Globe Lines */}
               <ellipse cx="30" cy="30" rx="14" ry="20" stroke="currentColor" strokeWidth="0.8" />
               <line x1="4" y1="30" x2="56" y2="30" stroke="currentColor" strokeWidth="1" />
               <line x1="10" y1="20" x2="50" y2="20" stroke="currentColor" strokeWidth="0.7" />
               <line x1="10" y1="40" x2="50" y2="40" stroke="currentColor" strokeWidth="0.7" />
-              {/* Center OIML Text */}
               <rect x="14" y="22" width="32" height="16" fill="#FAF7F2" rx="2" />
               <text x="30" y="34" fontSize="11" fontFamily="sans-serif" fontWeight="900" textAnchor="middle" fill="#24211D" letterSpacing="1">OIML</text>
               <text x="30" y="49" fontSize="8" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle" fill="#5C554E">R-76</text>
@@ -126,15 +141,48 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
 
         </div>
 
-        {/* Right: Lab Selector, Notifications, User Profile & Date/Time */}
+        {/* Right: Functional Laboratory Selector, Notifications, User Profile & Date/Time */}
         {user && (
           <div className="flex items-center space-x-4 shrink-0">
             
-            {/* Laboratory Selector */}
-            <div className="hidden xl:flex items-center space-x-2 text-xs font-medium text-[#24211D] bg-[#EFEAE2] px-3 py-1.5 rounded-md border border-[#E2DDD5]">
-              <Building2 className="w-4 h-4 text-[#8C8275]" />
-              <span>{user.lab_name || 'Delhi Central Laboratory'}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#8C8275]" />
+            {/* Functional Laboratory Context Selector */}
+            <div className="relative hidden xl:block">
+              <button
+                onClick={() => setShowLabDropdown(!showLabDropdown)}
+                className="flex items-center space-x-2 text-xs font-semibold text-[#24211D] bg-[#EFEAE2] hover:bg-[#E5DDD2] px-3 py-1.5 rounded-md border border-[#E2DDD5] transition shadow-2xs"
+                title="Select Active Laboratory Context"
+              >
+                <Building2 className="w-4 h-4 text-[#8C8275]" />
+                <span className="truncate max-w-[200px]">{selectedLab}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#8C8275] shrink-0" />
+              </button>
+
+              {showLabDropdown && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-[#E2DDD5] rounded-xl shadow-xl py-2 z-50 text-xs text-[#24211D]">
+                  <div className="px-4 py-2 border-b border-[#E2DDD5] font-mono text-[10px] uppercase font-bold text-[#8C8275] bg-[#FAF7F2]">
+                    Active Laboratory Context
+                  </div>
+                  <div className="max-h-56 overflow-y-auto divide-y divide-[#E2DDD5]">
+                    {availableLabs.map(lab => (
+                      <button
+                        key={lab.id}
+                        onClick={() => {
+                          setSelectedLab(lab.name);
+                          setShowLabDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 hover:bg-[#FAF7F2] transition flex items-center justify-between text-xs ${selectedLab === lab.name ? 'font-bold bg-[#FAF7F2] text-[#9C5A3C]' : ''}`}
+                      >
+                        <span className="truncate pr-2">{lab.name}</span>
+                        {selectedLab === lab.name ? (
+                          <Check className="w-4 h-4 text-[#9C5A3C] shrink-0" />
+                        ) : (
+                          lab.code && <span className="font-mono text-[10px] text-[#8C8275] shrink-0">{lab.code}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Notifications Dropdown */}
@@ -151,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
               </button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-[#FFFFFF] border border-[#E2DDD5] rounded-lg shadow-xl py-2 z-50 text-[#24211D] font-mono text-xs">
+                <div className="absolute right-0 mt-2 w-80 bg-[#FFFFFF] border border-[#E2DDD5] rounded-xl shadow-xl py-2 z-50 text-[#24211D] font-mono text-xs">
                   <div className="px-4 py-2 border-b border-[#E2DDD5] font-bold flex justify-between items-center bg-[#FAF7F2]">
                     <span>NOTIFICATIONS</span>
                     <span className="text-[10px] bg-[#9C5A3C] text-white px-1.5 py-0.5 rounded">
@@ -203,7 +251,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
               </button>
 
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-56 bg-[#FFFFFF] border border-[#E2DDD5] rounded-lg shadow-xl py-2 z-50 text-xs">
+                <div className="absolute right-0 mt-2 w-56 bg-[#FFFFFF] border border-[#E2DDD5] rounded-xl shadow-xl py-2 z-50 text-xs">
                   <div className="px-4 py-2 border-b border-[#E2DDD5] bg-[#FAF7F2]">
                     <p className="font-bold text-[#24211D]">{user.name}</p>
                     <p className="text-[10px] font-mono text-[#8C8275] uppercase">{user.role}</p>
