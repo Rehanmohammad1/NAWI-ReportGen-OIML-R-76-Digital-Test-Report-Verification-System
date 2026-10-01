@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { NawiLogo } from '../components/NawiLogo';
+import { TechnicalSketchBg } from '../components/TechnicalSketchBg';
 import { Shield, UserCheck, AlertCircle, CheckCircle2, UserPlus, LogIn, Scale, Building2, KeyRound } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -113,7 +114,8 @@ export const LoginPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6] text-[#25221F] flex flex-col justify-between p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-[#F9F8F6] text-[#25221F] flex flex-col justify-between p-4 md:p-8 font-sans tech-grid-bg relative overflow-hidden">
+      <TechnicalSketchBg className="absolute inset-0 max-w-4xl mx-auto my-auto" />
       {/* Top institutional banner */}
       <div className="max-w-md w-full mx-auto text-center pt-4">
         <div className="inline-flex items-center justify-center p-3 rounded-xl bg-white border border-[#E6E2DC] shadow-sm mb-4">

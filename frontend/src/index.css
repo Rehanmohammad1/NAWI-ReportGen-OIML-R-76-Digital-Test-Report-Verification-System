@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
 
 :root {
   --nawi-bg-main: #F9F8F6;
   --nawi-panel-bg: #FFFFFF;
-  --nawi-text-main: #22201D;
-  --nawi-text-muted: #6E685E;
+  --nawi-text-main: #25221F;
+  --nawi-text-muted: #666059;
   --nawi-border: #E6E2DC;
   --nawi-border-dark: #D4CEC5;
   --nawi-accent-terracotta: #C87A57;
@@ -19,8 +19,8 @@
 body {
   margin: 0;
   background-color: #F9F8F6;
-  color: #22201D;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #25221F;
+  font-family: 'Hanken Grotesk', 'HK Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -30,29 +30,36 @@ body {
 }
 
 .font-sans {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Hanken Grotesk', 'HK Grotesk', 'Inter', sans-serif;
 }
 
 .font-mono {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Subtle Metrology Design Language Elements */
-.metrology-ruler-top {
+/* Subtle Technical Sketch-Art Background Patterns */
+.tech-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(37, 34, 31, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 34, 31, 0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.tech-ruler-ticks {
   background-image: repeating-linear-gradient(
     90deg,
-    #E6E2DC,
-    #E6E2DC 1px,
+    rgba(37, 34, 31, 0.15),
+    rgba(37, 34, 31, 0.15) 1px,
     transparent 1px,
-    transparent 8px
+    transparent 6px
   );
-  height: 4px;
+  height: 6px;
 }
 
 .metrology-card {
   background-color: #FFFFFF;
   border: 1px solid #E6E2DC;
-  box-shadow: 0 1px 3px 0 rgba(34, 32, 29, 0.04);
+  box-shadow: 0 1px 3px 0 rgba(37, 34, 31, 0.03);
 }
 
 .metrology-card-hover {
@@ -61,5 +68,33 @@ body {
 
 .metrology-card-hover:hover {
   border-color: #C87A57;
-  box-shadow: 0 4px 12px -2px rgba(34, 32, 29, 0.06);
+  box-shadow: 0 4px 12px -2px rgba(37, 34, 31, 0.06);
 }
+
+/* Technical Corner Markings */
+.tech-corner-marks {
+  position: relative;
+}
+
+.tech-corner-marks::before {
+  content: "+";
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(37, 34, 31, 0.2);
+  pointer-events: none;
+}
+
+.tech-corner-marks::after {
+  content: "+";
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(37, 34, 31, 0.2);
+  pointer-events: none;
+}
+

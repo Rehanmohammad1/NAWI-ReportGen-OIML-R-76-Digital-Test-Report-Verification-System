@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { DemoWatermark } from '../components/DemoWatermark';
 import { TestSessionProgress } from '../components/TestSessionProgress';
+import { TechnicalSketchBg } from '../components/TechnicalSketchBg';
 import { 
   FileText, Clock, AlertTriangle, CheckCircle2, 
   PlusCircle, ShieldCheck, ArrowRight, Users, Scale, AlertOctagon, Activity, ChevronRight, Layers, FileCheck
@@ -61,7 +62,8 @@ export const DashboardPage: React.FC = () => {
   ) || [];
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto font-sans text-[#25221F]">
+    <div className="space-y-6 max-w-7xl mx-auto font-sans text-[#25221F] relative">
+      <TechnicalSketchBg className="absolute top-0 right-0 w-96 h-64 pointer-events-none" />
       <DemoWatermark />
 
       {/* Page Header & Actions */}
