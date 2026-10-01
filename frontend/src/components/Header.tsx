@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
     <header className="bg-[#FAF7F2] text-[#24211D] border-b border-[#E2DDD5] sticky top-0 z-40 shadow-xs font-sans" ref={headerRef}>
       <div
         className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4"
-        style={{ height: '94px', minHeight: '94px', maxHeight: '94px' }}
+        style={{ height: '76px', minHeight: '76px', maxHeight: '76px' }}
       >
         
         {/* Left: Ashoka Pillar Emblem & Official Unified System Branding */}
@@ -86,13 +86,13 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
           <IndianNationalEmblem
             className="text-black shrink-0"
             style={{
-              width: '40px',
-              height: '48px',
-              minWidth: '40px',
-              minHeight: '48px',
-              maxWidth: '40px',
-              maxHeight: '48px',
-              flex: '0 0 40px',
+              width: '28px',
+              height: '44px',
+              minWidth: '28px',
+              minHeight: '44px',
+              maxWidth: '28px',
+              maxHeight: '44px',
+              flex: '0 0 28px',
               objectFit: 'contain'
             }}
           />
