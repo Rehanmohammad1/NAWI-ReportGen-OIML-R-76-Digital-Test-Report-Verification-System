@@ -90,15 +90,15 @@ export const Navbar: React.FC = () => {
   const getRoleBadgeStyle = (role?: string) => {
     switch (role) {
       case 'admin':
-        return 'bg-[#F1EADE] text-[#413B32] border-[#D9D1C5] font-bold';
+        return 'bg-[#C87A57] text-[#FFFFFF] border-[#C87A57] font-bold';
       case 'lab_manager':
-        return 'bg-[#A7BABA]/20 text-[#F1EADE] border-[#A7BABA]';
+        return 'bg-[#E6E2DC]/30 text-[#F9F8F6] border-[#E6E2DC]/50';
       case 'reviewer':
-        return 'bg-[#A7BABA]/30 text-[#F1EADE] border-[#A7BABA]';
+        return 'bg-[#3E7B66]/40 text-[#F9F8F6] border-[#3E7B66]';
       case 'inspector':
-        return 'bg-[#D9D1C5]/20 text-[#F1EADE] border-[#D9D1C5]/40';
+        return 'bg-[#E6E2DC]/20 text-[#F9F8F6] border-[#E6E2DC]/30';
       default:
-        return 'bg-[#F1EADE] text-[#413B32] border-[#D9D1C5]';
+        return 'bg-[#F9F8F6] text-[#22201D] border-[#E6E2DC]';
     }
   };
 
@@ -164,9 +164,9 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="bg-[#413B32] text-[#F1EADE] border-b border-[#D9D1C5]/30 sticky top-0 z-50 shadow-md font-sans" ref={navRef}>
+    <header className="bg-[#25221F] text-[#F9F8F6] border-b border-[#3D3833] sticky top-0 z-50 shadow-sm font-sans" ref={navRef}>
       {/* Calibration Ruler Top Motif */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#A7BABA] via-[#D9D1C5] to-[#A7BABA]" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#C87A57] via-[#D48866] to-[#C87A57]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Header Row */}
@@ -174,19 +174,19 @@ export const Navbar: React.FC = () => {
           
           {/* Brand & Logo */}
           <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-9 h-9 rounded bg-[#A7BABA]/20 border border-[#A7BABA]/40 flex items-center justify-center font-mono text-[#F1EADE] shadow-xs">
-              <NawiLogo className="w-5 h-5 text-[#F1EADE]" />
+            <div className="w-9 h-9 rounded bg-[#C87A57]/20 border border-[#C87A57]/40 flex items-center justify-center font-mono text-[#F9F8F6] shadow-xs">
+              <NawiLogo className="w-5.5 h-5.5 text-[#F9F8F6]" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-bold tracking-tight text-[#F1EADE] text-sm font-sans uppercase">
-                  OIML R-76 LEGAL METROLOGY SYSTEM
+                <span className="font-bold tracking-tight text-[#F9F8F6] text-sm font-serif-header tracking-wide">
+                  OIML R-76 Legal Metrology System
                 </span>
-                <span className="bg-[#A7BABA]/20 text-[#F1EADE] text-[9px] uppercase font-mono px-1.5 py-0.5 rounded border border-[#A7BABA]/40 hidden sm:inline-block">
+                <span className="bg-[#C87A57]/20 text-[#F9F8F6] text-[9px] uppercase font-mono px-1.5 py-0.5 rounded border border-[#C87A57]/40 hidden sm:inline-block">
                   DoCA Govt. of India
                 </span>
               </div>
-              <p className="text-[10px] text-[#D9D1C5]/80 font-mono hidden md:block">
+              <p className="text-[10px] text-[#E6E2DC]/70 font-mono hidden md:block">
                 NAWI Evaluation & Digital Certificate Verification (SIH26035)
               </p>
             </div>
@@ -196,7 +196,7 @@ export const Navbar: React.FC = () => {
           {user && (
             <div className="flex items-center space-x-3">
               {/* Role Badge */}
-              <div className={`hidden lg:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wide border ${getRoleBadgeStyle(user.role)}`}>
+              <div className={`hidden lg:inline-block px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider border ${getRoleBadgeStyle(user.role)}`}>
                 {user.role.toUpperCase().replace('_', ' ')}
               </div>
 
@@ -204,35 +204,35 @@ export const Navbar: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="p-1.5 text-[#D9D1C5] hover:text-[#FFFFFF] rounded hover:bg-[#A7BABA]/20 transition border border-transparent hover:border-[#A7BABA]/30"
+                  className="p-1.5 text-[#E6E2DC] hover:text-[#FFFFFF] rounded hover:bg-[#FFFFFF]/10 transition border border-transparent hover:border-[#E6E2DC]/30"
                   title="Notifications"
                 >
                   <Bell className="w-4 h-4" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-[#C87A57] rounded-full animate-pulse" />
                   )}
                 </button>
 
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-80 bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm shadow-xl py-2 z-50 text-[#413B32] font-mono text-xs">
-                    <div className="px-4 py-2 border-b border-[#D9D1C5] font-bold text-[#413B32] flex justify-between items-center bg-[#F1EADE]/50">
+                  <div className="absolute right-0 mt-2 w-80 bg-[#FFFFFF] border border-[#E6E2DC] rounded shadow-xl py-2 z-50 text-[#22201D] font-mono text-xs">
+                    <div className="px-4 py-2 border-b border-[#E6E2DC] font-bold flex justify-between items-center bg-[#F9F8F6]">
                       <span>NOTIFICATIONS</span>
-                      <span className="text-[10px] bg-[#413B32] text-[#F1EADE] px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] bg-[#25221F] text-[#F9F8F6] px-1.5 py-0.5 rounded">
                         {unreadCount} UNREAD
                       </span>
                     </div>
-                    <div className="max-h-64 overflow-y-auto divide-y divide-[#D9D1C5]/40 font-sans">
+                    <div className="max-h-64 overflow-y-auto divide-y divide-[#E6E2DC]/60 font-sans">
                       {notifications.length === 0 ? (
-                        <p className="p-4 text-xs text-[#413B32]/60 text-center font-mono">No new notifications</p>
+                        <p className="p-4 text-xs text-[#6E685E] text-center font-mono">No new notifications</p>
                       ) : (
                         notifications.map(n => (
                           <div
                             key={n.id}
                             onClick={() => handleMarkRead(n.id)}
-                            className={`p-3 text-xs cursor-pointer hover:bg-[#F1EADE]/60 transition ${!n.read ? 'bg-[#F1EADE] font-medium' : 'text-[#413B32]/70'}`}
+                            className={`p-3 text-xs cursor-pointer hover:bg-[#F9F8F6] transition ${!n.read ? 'bg-[#F9F8F6] font-medium' : 'text-[#6E685E]'}`}
                           >
                             <p className="leading-snug font-mono">{n.message}</p>
-                            <span className="text-[10px] text-[#413B32]/50 font-mono mt-1 block">
+                            <span className="text-[10px] text-[#6E685E] font-mono mt-1 block">
                               {new Date(n.created_at).toLocaleString()}
                             </span>
                           </div>
@@ -244,20 +244,20 @@ export const Navbar: React.FC = () => {
               </div>
 
               {/* User Identity Info */}
-              <div className="hidden sm:flex items-center space-x-2 border-l border-[#D9D1C5]/30 pl-3">
-                <div className="w-7 h-7 rounded bg-[#F1EADE] text-[#413B32] flex items-center justify-center text-xs font-bold border border-[#D9D1C5]">
+              <div className="hidden sm:flex items-center space-x-2 border-l border-[#E6E2DC]/20 pl-3">
+                <div className="w-7 h-7 rounded-full bg-[#C87A57] text-[#FFFFFF] flex items-center justify-center text-xs font-bold shadow-xs">
                   <UserIcon className="w-3.5 h-3.5" />
                 </div>
                 <div className="text-left font-mono">
-                  <p className="text-xs font-bold text-[#F1EADE] leading-tight">{user.name}</p>
-                  <p className="text-[9px] text-[#D9D1C5]/80 uppercase">{user.lab_name || 'Central Metrology Lab'}</p>
+                  <p className="text-xs font-bold text-[#F9F8F6] leading-tight">{user.name}</p>
+                  <p className="text-[9px] text-[#E6E2DC]/70 uppercase">{user.lab_name || 'Central Metrology Lab'}</p>
                 </div>
               </div>
 
               {/* Logout Button */}
               <button
                 onClick={logout}
-                className="p-1.5 text-[#D9D1C5] hover:text-red-300 rounded hover:bg-red-900/30 transition border border-transparent hover:border-red-500/30"
+                className="p-1.5 text-[#E6E2DC] hover:text-red-300 rounded hover:bg-red-950/40 transition border border-transparent hover:border-red-500/30"
                 title="Sign Out"
               >
                 <LogOut className="w-4 h-4" />
@@ -266,7 +266,7 @@ export const Navbar: React.FC = () => {
               {/* Mobile Hamburger Toggle Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-1.5 text-[#F1EADE] hover:bg-[#A7BABA]/20 rounded border border-[#A7BABA]/30 ml-1"
+                className="md:hidden p-1.5 text-[#F9F8F6] hover:bg-[#FFFFFF]/10 rounded border border-[#E6E2DC]/30 ml-1"
                 aria-label="Toggle Navigation Menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -277,17 +277,17 @@ export const Navbar: React.FC = () => {
 
         {/* DESKTOP TOP HORIZONTAL NAVIGATION BAR */}
         {user && (
-          <nav className="hidden md:flex items-center space-x-1 border-t border-[#D9D1C5]/20 py-1 font-mono text-xs">
+          <nav className="hidden md:flex items-center space-x-1 border-t border-[#3D3833] py-1 font-mono text-xs">
             
             {/* Direct Link: Dashboard */}
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
-                `px-3 py-1.5 rounded-xs transition flex items-center space-x-1.5 font-bold ${
+                `px-3.5 py-1.5 rounded-sm transition flex items-center space-x-1.5 font-medium ${
                   isActive
-                    ? 'bg-[#F1EADE] text-[#413B32] shadow-xs'
-                    : 'text-[#F1EADE] hover:bg-[#F1EADE]/10 hover:text-[#FFFFFF]'
+                    ? 'bg-[#C87A57] text-[#FFFFFF] font-bold shadow-xs'
+                    : 'text-[#E6E2DC] hover:bg-[#FFFFFF]/10 hover:text-[#FFFFFF]'
                 }`
               }
             >
@@ -297,7 +297,6 @@ export const Navbar: React.FC = () => {
 
             {/* Categorized Dropdowns */}
             {categories.map(category => {
-              // Check if user has permission for at least one item in category
               const visibleItems = category.items.filter(item => hasRole(item.roles));
               if (visibleItems.length === 0) return null;
 
@@ -315,22 +314,22 @@ export const Navbar: React.FC = () => {
                   <button
                     onClick={() => setActiveDropdown(isOpen ? null : category.id)}
                     aria-expanded={isOpen}
-                    className={`px-3 py-1.5 rounded-xs transition flex items-center space-x-1.5 font-bold focus:outline-none ${
+                    className={`px-3.5 py-1.5 rounded-sm transition flex items-center space-x-1.5 font-medium focus:outline-none ${
                       isCatActive
-                        ? 'bg-[#A7BABA]/30 text-[#FFFFFF] border-b-2 border-[#F1EADE]'
+                        ? 'bg-[#C87A57]/30 text-[#FFFFFF] border-b-2 border-[#C87A57] font-bold'
                         : isOpen
-                        ? 'bg-[#F1EADE]/20 text-[#FFFFFF]'
-                        : 'text-[#F1EADE]/90 hover:bg-[#F1EADE]/10 hover:text-[#FFFFFF]'
+                        ? 'bg-[#FFFFFF]/15 text-[#FFFFFF]'
+                        : 'text-[#E6E2DC] hover:bg-[#FFFFFF]/10 hover:text-[#FFFFFF]'
                     }`}
                   >
-                    <CatIcon className="w-3.5 h-3.5 text-[#A7BABA]" />
+                    <CatIcon className="w-3.5 h-3.5 text-[#C87A57]" />
                     <span>{category.label}</span>
                     <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {/* Dropdown Menu Panel */}
                   {isOpen && (
-                    <div className="absolute left-0 mt-1 w-56 bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs shadow-xl py-1.5 z-50 text-[#413B32] font-mono text-xs">
+                    <div className="absolute left-0 mt-1 w-56 bg-[#FFFFFF] border border-[#E6E2DC] rounded shadow-xl py-1.5 z-50 text-[#22201D] font-mono text-xs">
                       {visibleItems.map(item => {
                         const ItemIcon = item.icon;
                         const active = isPathActive(item.to, item.exact);
@@ -339,13 +338,13 @@ export const Navbar: React.FC = () => {
                             key={item.to}
                             to={item.to}
                             onClick={() => setActiveDropdown(null)}
-                            className={`px-3.5 py-2 flex items-center space-x-2 transition ${
+                            className={`px-3.5 py-2 flex items-center space-x-2.5 transition ${
                               active
-                                ? 'bg-[#F1EADE] text-[#413B32] font-bold border-l-2 border-[#413B32]'
-                                : 'hover:bg-[#F1EADE]/40 text-[#413B32]'
+                                ? 'bg-[#F9F8F6] text-[#C87A57] font-bold border-l-3 border-[#C87A57]'
+                                : 'hover:bg-[#F9F8F6] text-[#22201D]'
                             }`}
                           >
-                            <ItemIcon className={`w-3.5 h-3.5 ${active ? 'text-[#413B32]' : 'text-[#413B32]/70'}`} />
+                            <ItemIcon className={`w-3.5 h-3.5 ${active ? 'text-[#C87A57]' : 'text-[#6E685E]'}`} />
                             <span>{item.label}</span>
                           </NavLink>
                         );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import type { InstrumentModel, Instrument, Manufacturer } from '../types';
-import { Scale, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { Scale, AlertCircle, CheckCircle, Info, Plus, CheckCircle2, Building, Layers } from 'lucide-react';
 
 export const InstrumentsPage: React.FC = () => {
   const [models, setModels] = useState<InstrumentModel[]>([]);
@@ -94,44 +94,42 @@ export const InstrumentsPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="p-8 text-center text-xs font-mono text-[#413B32]/70">Loading instrument registry...</div>;
+    return <div className="p-12 text-center text-xs font-mono text-[#666059]">Loading instrument registry...</div>;
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#D9D1C5]">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-[#E6E2DC]">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-            <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-              Instrument & Technical Specification Registry
-            </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5]">
-              OIML R-76 MODELS
-            </span>
+          <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-[#666059] mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#C87A57]"></span>
+            <span>Legal Metrology Registry</span>
           </div>
-          <p className="text-xs text-[#413B32]/70 font-mono mt-0.5">
+          <h1 className="font-serif-header text-2xl md:text-3xl font-semibold text-[#25221F] tracking-tight">
+            Instrument & Technical Specification Registry
+          </h1>
+          <p className="text-xs text-[#666059] mt-1">
             Registered NAWI models, accuracy classes (I, II, III, IIII), scale intervals (e, d, n, Max, Min).
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 font-mono text-xs">
+        <div className="flex flex-wrap gap-2.5 text-xs">
           <button
             onClick={() => setShowAddMfg(true)}
-            className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] px-3 py-1.5 rounded-xs border border-[#D9D1C5] font-semibold transition"
+            className="bg-white hover:bg-[#FAF6F0] text-[#25221F] px-3.5 py-2 rounded-md border border-[#E6E2DC] font-medium transition shadow-2xs"
           >
             + Add Manufacturer
           </button>
           <button
             onClick={() => setShowAddModel(true)}
-            className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] px-3 py-1.5 rounded-xs border border-[#D9D1C5] font-semibold transition"
+            className="bg-white hover:bg-[#FAF6F0] text-[#25221F] px-3.5 py-2 rounded-md border border-[#E6E2DC] font-medium transition shadow-2xs"
           >
             + Add Model
           </button>
           <button
             onClick={() => setShowAddInst(true)}
-            className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] px-3.5 py-1.5 rounded-xs font-semibold border border-[#413B32] transition"
+            className="bg-[#C87A57] hover:bg-[#B36846] text-white px-4 py-2 rounded-md font-medium transition shadow-xs"
           >
             + Register Instrument
           </button>
@@ -139,43 +137,43 @@ export const InstrumentsPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-300 text-red-900 p-3 rounded-xs text-xs flex items-center justify-between font-mono">
+        <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-3.5 rounded-lg text-xs flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 text-red-700 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-[#C54B4B] flex-shrink-0" />
             <span>{error}</span>
           </div>
-          <button onClick={() => setError('')} className="text-[#413B32]/60 hover:text-[#413B32]">✕</button>
+          <button onClick={() => setError('')} className="text-[#25221F]/60 hover:text-[#25221F]">✕</button>
         </div>
       )}
 
       {success && (
-        <div className="bg-emerald-50 border border-emerald-300 text-emerald-900 p-3 rounded-xs text-xs flex items-center justify-between font-mono">
+        <div className="bg-[#EBF5F1] border border-[#BDE3D5] text-[#2D5A4B] p-3.5 rounded-lg text-xs flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <CheckCircle className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-[#3E7B66] flex-shrink-0" />
             <span>{success}</span>
           </div>
-          <button onClick={() => setSuccess('')} className="text-[#413B32]/60 hover:text-[#413B32]">✕</button>
+          <button onClick={() => setSuccess('')} className="text-[#25221F]/60 hover:text-[#25221F]">✕</button>
         </div>
       )}
 
       {/* Test Selection Rationale Modal */}
       {selectedTestSuggestion && (
-        <div className="bg-[#F1EADE]/60 border border-[#D9D1C5] rounded-xs p-4 text-[#413B32]">
-          <div className="flex items-center justify-between mb-2 border-b border-[#D9D1C5] pb-2">
-            <h3 className="font-mono font-bold text-xs text-[#413B32] flex items-center space-x-2">
-              <Info className="w-4 h-4 text-[#413B32]" />
+        <div className="bg-[#FAF6F0] border border-[#E6E2DC] rounded-lg p-5 text-[#25221F] shadow-2xs space-y-3">
+          <div className="flex items-center justify-between border-b border-[#E6E2DC] pb-2">
+            <h3 className="font-serif-header text-sm font-semibold text-[#25221F] flex items-center space-x-2">
+              <Info className="w-4 h-4 text-[#C87A57]" />
               <span>Automatic Test-Set Selection Rationale: {selectedTestSuggestion.model_name}</span>
             </h3>
-            <button onClick={() => setSelectedTestSuggestion(null)} className="text-[#413B32]/60 hover:text-[#413B32] font-mono text-xs">✕ Close</button>
+            <button onClick={() => setSelectedTestSuggestion(null)} className="text-[#666059] hover:text-[#25221F] text-xs font-medium">✕ Close</button>
           </div>
-          <p className="text-xs text-[#413B32]/80 font-mono mb-3">
-            Class <b>{selectedTestSuggestion.accuracy_class}</b> Instrument │ Max Capacity: <b>{selectedTestSuggestion.max_capacity} kg</b> │ e: <b>{selectedTestSuggestion.e} kg</b> │ n: <b>{selectedTestSuggestion.n}</b> scale intervals.
+          <p className="text-xs text-[#666059]">
+            Class <strong>{selectedTestSuggestion.accuracy_class}</strong> Instrument &nbsp;&bull;&nbsp; Max Capacity: <strong>{selectedTestSuggestion.max_capacity} kg</strong> &nbsp;&bull;&nbsp; e: <strong>{selectedTestSuggestion.e} kg</strong> &nbsp;&bull;&nbsp; n: <strong>{selectedTestSuggestion.n}</strong> scale intervals.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             {selectedTestSuggestion.suggested_tests.map((t: any) => (
-              <div key={t.code} className="bg-[#FFFFFF] border border-[#D9D1C5] p-2.5 rounded-xs">
-                <span className="font-bold text-[#413B32] block">{t.code} — {t.name}</span>
-                <span className="text-[#413B32]/70 text-[11px] block mt-1">{t.rationale}</span>
+              <div key={t.code} className="bg-white border border-[#E6E2DC] p-3 rounded-md">
+                <span className="font-semibold text-[#25221F] block">{t.code} — {t.name}</span>
+                <span className="text-[#666059] text-xs block mt-1">{t.rationale}</span>
               </div>
             ))}
           </div>
@@ -183,46 +181,46 @@ export const InstrumentsPage: React.FC = () => {
       )}
 
       {/* Models Table */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-        <div className="px-3.5 py-2.5 bg-[#F1EADE]/40 border-b border-[#D9D1C5]">
-          <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase">Approved Instrument Models Catalog</h2>
+      <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+        <div className="px-5 py-3 bg-[#FAF6F0] border-b border-[#E6E2DC]">
+          <h2 className="text-sm font-semibold font-serif-header text-[#25221F]">Approved Instrument Models Catalog</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
               <tr>
-                <th className="p-2.5">Model Name</th>
-                <th className="p-2.5">Manufacturer</th>
-                <th className="p-2.5">Class</th>
-                <th className="p-2.5">Max (kg)</th>
-                <th className="p-2.5">Min (kg)</th>
-                <th className="p-2.5">e (kg)</th>
-                <th className="p-2.5">d (kg)</th>
-                <th className="p-2.5">n = Max/e</th>
-                <th className="p-2.5 text-right">Applicable Test Rules</th>
+                <th className="p-3 pl-5">Model Name</th>
+                <th className="p-3">Manufacturer</th>
+                <th className="p-3">Class</th>
+                <th className="p-3">Max (kg)</th>
+                <th className="p-3">Min (kg)</th>
+                <th className="p-3">e (kg)</th>
+                <th className="p-3">d (kg)</th>
+                <th className="p-3">n = Max/e</th>
+                <th className="p-3 pr-5 text-right">Applicable Test Rules</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+            <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
               {models.map((m) => (
-                <tr key={m.id} className="hover:bg-[#F1EADE]/30 transition">
-                  <td className="p-2.5 font-bold text-[#413B32]">{m.model_name}</td>
-                  <td className="p-2.5">{m.manufacturer_name}</td>
-                  <td className="p-2.5">
-                    <span className="bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs font-mono font-bold text-[10px]">
+                <tr key={m.id} className="hover:bg-[#FAF6F0]/60 transition">
+                  <td className="p-3 pl-5 font-semibold text-[#25221F]">{m.model_name}</td>
+                  <td className="p-3">{m.manufacturer_name}</td>
+                  <td className="p-3">
+                    <span className="bg-[#FAF6F0] text-[#25221F] border border-[#E6E2DC] px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold">
                       Class {m.accuracy_class}
                     </span>
                   </td>
-                  <td className="p-2.5 font-mono">{m.max_capacity}</td>
-                  <td className="p-2.5 font-mono">{m.min_capacity}</td>
-                  <td className="p-2.5 font-mono">{m.e}</td>
-                  <td className="p-2.5 font-mono">{m.d}</td>
-                  <td className="p-2.5 font-mono font-bold text-[#413B32]">{m.n}</td>
-                  <td className="p-2.5 text-right">
+                  <td className="p-3 font-mono">{m.max_capacity}</td>
+                  <td className="p-3 font-mono">{m.min_capacity}</td>
+                  <td className="p-3 font-mono">{m.e}</td>
+                  <td className="p-3 font-mono">{m.d}</td>
+                  <td className="p-3 font-mono font-semibold text-[#25221F]">{m.n}</td>
+                  <td className="p-3 pr-5 text-right">
                     <button
                       onClick={() => handleSuggestTests(m.id)}
-                      className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] px-2 py-0.5 rounded-xs border border-[#D9D1C5] font-mono font-semibold text-[10px] transition"
+                      className="bg-white hover:bg-[#FAF6F0] text-[#C87A57] px-2.5 py-1 rounded-md border border-[#E6E2DC] font-medium text-xs transition"
                     >
-                      Show Prescribed Tests →
+                      Prescribed Tests →
                     </button>
                   </td>
                 </tr>
@@ -233,37 +231,37 @@ export const InstrumentsPage: React.FC = () => {
       </div>
 
       {/* Instruments Table */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-        <div className="px-3.5 py-2.5 bg-[#F1EADE]/40 border-b border-[#D9D1C5]">
-          <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase">Registered Physical Instruments (Serial Number Registry)</h2>
+      <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+        <div className="px-5 py-3 bg-[#FAF6F0] border-b border-[#E6E2DC]">
+          <h2 className="text-sm font-semibold font-serif-header text-[#25221F]">Registered Physical Instruments (Serial Number Registry)</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
               <tr>
-                <th className="p-2.5">Serial Number</th>
-                <th className="p-2.5">Model Name</th>
-                <th className="p-2.5">Manufacturer</th>
-                <th className="p-2.5">Accuracy Class</th>
-                <th className="p-2.5">Manufacture Year</th>
-                <th className="p-2.5">Data Status</th>
+                <th className="p-3 pl-5">Serial Number</th>
+                <th className="p-3">Model Name</th>
+                <th className="p-3">Manufacturer</th>
+                <th className="p-3">Accuracy Class</th>
+                <th className="p-3">Manufacture Year</th>
+                <th className="p-3 pr-5">Data Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+            <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
               {instruments.map((inst) => (
-                <tr key={inst.id} className="hover:bg-[#F1EADE]/30 transition">
-                  <td className="p-2.5 font-mono font-bold text-[#413B32]">{inst.serial_number}</td>
-                  <td className="p-2.5 font-semibold text-[#413B32]">{inst.model_name}</td>
-                  <td className="p-2.5">{inst.manufacturer_name}</td>
-                  <td className="p-2.5 font-mono">Class {inst.accuracy_class}</td>
-                  <td className="p-2.5 font-mono">{inst.year_of_manufacture}</td>
-                  <td className="p-2.5 font-mono">
+                <tr key={inst.id} className="hover:bg-[#FAF6F0]/60 transition">
+                  <td className="p-3 pl-5 font-mono font-semibold text-[#25221F]">{inst.serial_number}</td>
+                  <td className="p-3 font-medium text-[#25221F]">{inst.model_name}</td>
+                  <td className="p-3 text-[#666059]">{inst.manufacturer_name}</td>
+                  <td className="p-3 font-mono">Class {inst.accuracy_class}</td>
+                  <td className="p-3 font-mono text-[#666059]">{inst.year_of_manufacture}</td>
+                  <td className="p-3 pr-5">
                     {inst.is_demo_data ? (
-                      <span className="bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                      <span className="bg-[#FAF6F0] text-[#666059] border border-[#E6E2DC] px-2.5 py-0.5 rounded-full font-mono text-[10px] font-medium">
                         SYSTEM SEED
                       </span>
                     ) : (
-                      <span className="bg-emerald-50 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                      <span className="bg-[#EBF5F1] text-[#2D5A4B] border border-[#BDE3D5] px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold">
                         REGISTERED
                       </span>
                     )}
@@ -277,29 +275,29 @@ export const InstrumentsPage: React.FC = () => {
 
       {/* Add Manufacturer Modal */}
       {showAddMfg && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Register New Manufacturer</h3>
-            <form onSubmit={handleCreateMfg} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Register New Manufacturer</h3>
+            <form onSubmit={handleCreateMfg} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Company Name</label>
-                <input required type="text" value={newMfg.name} onChange={e => setNewMfg({ ...newMfg, name: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Company Name</label>
+                <input required type="text" value={newMfg.name} onChange={e => setNewMfg({ ...newMfg, name: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Factory Address</label>
-                <input required type="text" value={newMfg.address} onChange={e => setNewMfg({ ...newMfg, address: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Factory Address</label>
+                <input required type="text" value={newMfg.address} onChange={e => setNewMfg({ ...newMfg, address: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Contact Email</label>
-                <input required type="email" value={newMfg.contact_email} onChange={e => setNewMfg({ ...newMfg, contact_email: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Contact Email</label>
+                <input required type="email" value={newMfg.contact_email} onChange={e => setNewMfg({ ...newMfg, contact_email: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Contact Phone</label>
-                <input required type="text" value={newMfg.contact_phone} onChange={e => setNewMfg({ ...newMfg, contact_phone: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Contact Phone</label>
+                <input required type="text" value={newMfg.contact_phone} onChange={e => setNewMfg({ ...newMfg, contact_phone: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setShowAddMfg(false)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Save Manufacturer</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setShowAddMfg(false)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Save Manufacturer</button>
               </div>
             </form>
           </div>
@@ -308,24 +306,24 @@ export const InstrumentsPage: React.FC = () => {
 
       {/* Add Model Modal */}
       {showAddModel && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-lg w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Register New Instrument Model</h3>
-            <form onSubmit={handleCreateModel} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-lg w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Register New Instrument Model</h3>
+            <form onSubmit={handleCreateModel} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Manufacturer</label>
-                <select value={newModel.manufacturer_id} onChange={e => setNewModel({ ...newModel, manufacturer_id: parseInt(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Manufacturer</label>
+                <select value={newModel.manufacturer_id} onChange={e => setNewModel({ ...newModel, manufacturer_id: parseInt(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   {manufacturers.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Model Designation</label>
-                <input required type="text" value={newModel.model_name} onChange={e => setNewModel({ ...newModel, model_name: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Model Designation</label>
+                <input required type="text" value={newModel.model_name} onChange={e => setNewModel({ ...newModel, model_name: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Accuracy Class</label>
-                  <select value={newModel.accuracy_class} onChange={e => setNewModel({ ...newModel, accuracy_class: e.target.value as any })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                  <label className="block text-[#25221F] font-medium mb-1">Accuracy Class</label>
+                  <select value={newModel.accuracy_class} onChange={e => setNewModel({ ...newModel, accuracy_class: e.target.value as any })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                     <option value="I">Class I (Special)</option>
                     <option value="II">Class II (Fine)</option>
                     <option value="III">Class III (Medium)</option>
@@ -333,27 +331,27 @@ export const InstrumentsPage: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Max Capacity (kg)</label>
-                  <input required type="number" step="any" value={newModel.max_capacity} onChange={e => setNewModel({ ...newModel, max_capacity: parseFloat(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">Max Capacity (kg)</label>
+                  <input required type="number" step="any" value={newModel.max_capacity} onChange={e => setNewModel({ ...newModel, max_capacity: parseFloat(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2.5">
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Min Cap (kg)</label>
-                  <input required type="number" step="any" value={newModel.min_capacity} onChange={e => setNewModel({ ...newModel, min_capacity: parseFloat(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">Min Cap (kg)</label>
+                  <input required type="number" step="any" value={newModel.min_capacity} onChange={e => setNewModel({ ...newModel, min_capacity: parseFloat(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">e (kg)</label>
-                  <input required type="number" step="any" value={newModel.e} onChange={e => setNewModel({ ...newModel, e: parseFloat(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">e (kg)</label>
+                  <input required type="number" step="any" value={newModel.e} onChange={e => setNewModel({ ...newModel, e: parseFloat(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">d (kg)</label>
-                  <input required type="number" step="any" value={newModel.d} onChange={e => setNewModel({ ...newModel, d: parseFloat(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">d (kg)</label>
+                  <input required type="number" step="any" value={newModel.d} onChange={e => setNewModel({ ...newModel, d: parseFloat(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
               </div>
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setShowAddModel(false)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Save Model</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setShowAddModel(false)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Save Model</button>
               </div>
             </form>
           </div>
@@ -362,27 +360,27 @@ export const InstrumentsPage: React.FC = () => {
 
       {/* Register Instrument Modal */}
       {showAddInst && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Register Physical Instrument (Unique Serial)</h3>
-            <form onSubmit={handleRegisterInst} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Register Physical Instrument</h3>
+            <form onSubmit={handleRegisterInst} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Instrument Model</label>
-                <select value={newInst.model_id} onChange={e => setNewInst({ ...newInst, model_id: parseInt(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Instrument Model</label>
+                <select value={newInst.model_id} onChange={e => setNewInst({ ...newInst, model_id: parseInt(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   {models.map(m => <option key={m.id} value={m.id}>{m.model_name} (Class {m.accuracy_class})</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Serial Number (Unique)</label>
-                <input required type="text" placeholder="e.g. SN-AVERY-2026-99" value={newInst.serial_number} onChange={e => setNewInst({ ...newInst, serial_number: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Serial Number (Unique)</label>
+                <input required type="text" placeholder="e.g. SN-AVERY-2026-99" value={newInst.serial_number} onChange={e => setNewInst({ ...newInst, serial_number: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Year of Manufacture</label>
-                <input required type="number" value={newInst.year_of_manufacture} onChange={e => setNewInst({ ...newInst, year_of_manufacture: parseInt(e.target.value) })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Year of Manufacture</label>
+                <input required type="number" value={newInst.year_of_manufacture} onChange={e => setNewInst({ ...newInst, year_of_manufacture: parseInt(e.target.value) })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setShowAddInst(false)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Register Instrument</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setShowAddInst(false)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Register Instrument</button>
               </div>
             </form>
           </div>
@@ -391,3 +389,4 @@ export const InstrumentsPage: React.FC = () => {
     </div>
   );
 };
+

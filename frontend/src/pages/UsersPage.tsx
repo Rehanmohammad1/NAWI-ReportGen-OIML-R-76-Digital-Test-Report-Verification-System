@@ -4,7 +4,7 @@ import { DemoWatermark } from '../components/DemoWatermark';
 import { 
   Users, UserCheck, Shield, Plus, Search, Filter, 
   Edit, Key, Power, AlertCircle, CheckCircle2, XCircle, Building2, RefreshCw,
-  Clock, Check, X
+  Clock, Check, X, ShieldAlert, UserPlus
 } from 'lucide-react';
 
 interface UserItem {
@@ -34,10 +34,10 @@ const ROLE_DISPLAY_MAP: Record<string, string> = {
 };
 
 const ROLE_BADGE_MAP: Record<string, string> = {
-  admin: 'bg-[#413B32] text-[#F1EADE] border-[#413B32]',
-  lab_manager: 'bg-[#F1EADE] text-[#413B32] border-[#D9D1C5]',
-  inspector: 'bg-[#A7BABA]/20 text-[#413B32] border-[#A7BABA]',
-  reviewer: 'bg-emerald-50 text-emerald-900 border-emerald-300',
+  admin: 'bg-[#25221F] text-white border-[#25221F]',
+  lab_manager: 'bg-[#FAF6F0] text-[#25221F] border-[#E6E2DC]',
+  inspector: 'bg-blue-50 text-blue-900 border-blue-200',
+  reviewer: 'bg-[#EBF5F1] text-[#2D5A4B] border-[#BDE3D5]',
 };
 
 export const UsersPage: React.FC = () => {
@@ -297,22 +297,20 @@ export const UsersPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">
       <DemoWatermark />
 
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-[#D9D1C5]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-[#E6E2DC]">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-            <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-              USER & AUTHORITY REGISTER
-            </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5]">
-              ADMINISTRATION
-            </span>
+          <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-[#666059] mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#C87A57]"></span>
+            <span>Administration & System Governance</span>
           </div>
-          <p className="text-xs text-[#413B32]/70 font-mono mt-0.5">
+          <h1 className="font-serif-header text-2xl md:text-3xl font-semibold text-[#25221F] tracking-tight">
+            User Authority & Role Management
+          </h1>
+          <p className="text-xs text-[#666059] mt-1">
             Manage authority accounts, review self-registrations, confirm lab scoping, and enforce credentials security.
           </p>
         </div>
@@ -323,104 +321,102 @@ export const UsersPage: React.FC = () => {
             setAddFormErrors({});
             setShowAddModal(true);
           }}
-          className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] font-mono text-xs px-3.5 py-1.5 rounded-xs transition inline-flex items-center space-x-1.5 border border-[#413B32]"
+          className="bg-[#C87A57] hover:bg-[#B36846] text-white font-medium text-xs px-4 py-2 rounded-md transition shadow-xs inline-flex items-center space-x-2"
         >
-          <Plus className="w-3.5 h-3.5 text-[#A7BABA]" />
+          <Plus className="w-4 h-4" />
           <span>+ Add User (Admin Created)</span>
         </button>
       </div>
 
       {/* Notifications */}
       {successMsg && (
-        <div className="bg-emerald-50 border border-emerald-300 text-emerald-900 p-3 rounded-xs text-xs flex items-center space-x-2 font-mono">
-          <CheckCircle2 className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+        <div className="bg-[#EBF5F1] border border-[#BDE3D5] text-[#2D5A4B] p-3.5 rounded-lg text-xs flex items-center space-x-2.5">
+          <CheckCircle2 className="w-4 h-4 text-[#3E7B66] flex-shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
       {errorMsg && (
-        <div className="bg-red-50 border border-red-300 text-red-900 p-3 rounded-xs text-xs flex items-center space-x-2 font-mono">
-          <AlertCircle className="w-4 h-4 text-red-700 flex-shrink-0" />
+        <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-3.5 rounded-lg text-xs flex items-center space-x-2.5">
+          <AlertCircle className="w-4 h-4 text-[#C54B4B] flex-shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {/* Summary Metrics Strip */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-3 shadow-2xs font-mono">
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#D9D1C5]/60 gap-2 md:gap-0">
-          <div className="px-3 py-0.5 flex items-center justify-between md:block">
-            <span className="text-[10px] font-semibold uppercase text-[#413B32]/70 block">Total Users</span>
-            <span className="text-lg font-bold text-[#413B32]">{summary?.total_users || 0}</span>
-          </div>
-          <div className="px-3 py-0.5 flex items-center justify-between md:block">
-            <span className="text-[10px] font-semibold uppercase text-emerald-900 block">Active Members</span>
-            <span className="text-lg font-bold text-emerald-900">{summary?.active_users || 0}</span>
-          </div>
-          <div
-            onClick={() => setActiveTab('pending')}
-            className="px-3 py-0.5 flex items-center justify-between md:block cursor-pointer hover:bg-[#F1EADE]/40 transition"
-          >
-            <span className="text-[10px] font-semibold uppercase text-amber-900 block">Pending Registrations</span>
-            <span className="text-lg font-bold text-amber-900">{summary?.pending_users || 0}</span>
-          </div>
-          <div className="px-3 py-0.5 flex items-center justify-between md:block">
-            <span className="text-[10px] font-semibold uppercase text-[#413B32]/70 block">Laboratories</span>
-            <span className="text-lg font-bold text-[#413B32]">{laboratories.length}</span>
-          </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="bg-white border border-[#E6E2DC] rounded-lg p-4 shadow-2xs">
+          <span className="text-xs font-medium uppercase tracking-wider text-[#666059] block mb-1">Total Users</span>
+          <span className="text-2xl font-serif-header font-bold text-[#25221F]">{summary?.total_users || 0}</span>
+        </div>
+        <div className="bg-white border border-[#BDE3D5] rounded-lg p-4 shadow-2xs bg-[#F7FCFA]">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#2D5A4B] block mb-1">Active Members</span>
+          <span className="text-2xl font-serif-header font-bold text-[#2D5A4B]">{summary?.active_users || 0}</span>
+        </div>
+        <div
+          onClick={() => setActiveTab('pending')}
+          className="bg-white border border-[#FBE3B5] rounded-lg p-4 shadow-2xs bg-[#FFFDF9] cursor-pointer hover:border-[#D9822B] transition"
+        >
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#B86200] block mb-1">Pending Registrations</span>
+          <span className="text-2xl font-serif-header font-bold text-[#B86200]">{summary?.pending_users || 0}</span>
+        </div>
+        <div className="bg-white border border-[#E6E2DC] rounded-lg p-4 shadow-2xs">
+          <span className="text-xs font-medium uppercase tracking-wider text-[#666059] block mb-1">Laboratories</span>
+          <span className="text-2xl font-serif-header font-bold text-[#25221F]">{laboratories.length}</span>
         </div>
       </div>
 
       {/* PENDING SELF-REGISTRATIONS REGISTER SECTION */}
       {pendingUsers.length > 0 && (
-        <div className="bg-[#FFFFFF] border border-amber-300 rounded-sm p-4 space-y-3 shadow-2xs font-mono">
-          <div className="flex items-center justify-between border-b border-amber-300 pb-2">
-            <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-amber-800" />
-              <h2 className="text-xs font-bold uppercase text-amber-900">
-                PENDING SELF-REGISTRATION REQUESTS ({pendingUsers.length})
+        <div className="bg-white border border-[#FBE3B5] rounded-lg p-5 space-y-4 shadow-2xs bg-[#FFFDF9]">
+          <div className="flex items-center justify-between border-b border-[#FBE3B5] pb-3">
+            <div className="flex items-center space-x-2.5">
+              <Clock className="w-5 h-5 text-[#B86200]" />
+              <h2 className="font-serif-header text-sm font-semibold text-[#B86200]">
+                Pending Self-Registration Requests ({pendingUsers.length})
               </h2>
             </div>
-            <span className="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-xs border border-amber-300 font-bold">
+            <span className="text-xs bg-[#FFF8EE] text-[#B86200] px-3 py-1 rounded-full border border-[#FBE3B5] font-mono font-semibold">
               ACTION REQUIRED
             </span>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-sans">
-              <thead className="bg-amber-50 text-amber-950 font-mono font-semibold uppercase text-[10px] border-b border-amber-300">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#FAF6F0] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
                 <tr>
-                  <th className="p-2.5">Applicant Name</th>
-                  <th className="p-2.5">Email Address</th>
-                  <th className="p-2.5">Requested Role</th>
-                  <th className="p-2.5">Assigned Laboratory</th>
-                  <th className="p-2.5">Submitted Date</th>
-                  <th className="p-2.5 text-right">Approval Actions</th>
+                  <th className="p-3 pl-4">Applicant Name</th>
+                  <th className="p-3">Email Address</th>
+                  <th className="p-3">Requested Role</th>
+                  <th className="p-3">Assigned Laboratory</th>
+                  <th className="p-3">Submitted Date</th>
+                  <th className="p-3 pr-4 text-right">Approval Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-amber-200 text-[#413B32]">
+              <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
                 {pendingUsers.map(u => (
-                  <tr key={u.id} className="hover:bg-amber-50/50 transition font-mono">
-                    <td className="p-2.5 font-bold text-[#413B32]">{u.name}</td>
-                    <td className="p-2.5">{u.email}</td>
-                    <td className="p-2.5 font-bold">
+                  <tr key={u.id} className="hover:bg-white transition">
+                    <td className="p-3 pl-4 font-semibold text-[#25221F]">{u.name}</td>
+                    <td className="p-3 font-mono text-[11px] text-[#666059]">{u.email}</td>
+                    <td className="p-3 font-medium">
                       {ROLE_DISPLAY_MAP[u.role] || u.role}
                     </td>
-                    <td className="p-2.5 text-[#413B32]/80">{u.lab_name || 'N/A'}</td>
-                    <td className="p-2.5 text-[11px] text-[#413B32]/70">
+                    <td className="p-3 text-[#666059]">{u.lab_name || 'N/A'}</td>
+                    <td className="p-3 font-mono text-[11px] text-[#666059]">
                       {new Date(u.created_at).toLocaleDateString()}
                     </td>
-                    <td className="p-2.5 text-right space-x-1.5">
+                    <td className="p-3 pr-4 text-right space-x-2">
                       <button
                         onClick={() => openApproveModal(u)}
-                        className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded-xs text-[11px] transition inline-flex items-center space-x-1"
+                        className="bg-[#3E7B66] hover:bg-[#326453] text-white font-medium px-3 py-1 rounded-md text-xs transition inline-flex items-center space-x-1 shadow-2xs"
                       >
-                        <Check className="w-3 h-3 text-emerald-200" />
+                        <Check className="w-3.5 h-3.5" />
                         <span>APPROVE</span>
                       </button>
                       <button
                         onClick={() => { setRejectingUser(u); setRejectReason(''); }}
-                        className="bg-red-700 hover:bg-red-800 text-white font-bold px-2.5 py-1 rounded-xs text-[11px] transition inline-flex items-center space-x-1"
+                        className="bg-[#C54B4B] hover:bg-[#A83D3D] text-white font-medium px-3 py-1 rounded-md text-xs transition inline-flex items-center space-x-1 shadow-2xs"
                       >
-                        <X className="w-3 h-3 text-red-200" />
+                        <X className="w-3.5 h-3.5" />
                         <span>REJECT</span>
                       </button>
                     </td>
@@ -433,22 +429,22 @@ export const UsersPage: React.FC = () => {
       )}
 
       {/* Main Users Table Filters Bar */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-3 flex flex-col sm:flex-row gap-2.5 items-center font-mono">
+      <div className="bg-white border border-[#E6E2DC] rounded-lg p-3.5 flex flex-col sm:flex-row gap-3 items-center shadow-2xs">
         <form onSubmit={handleSearchSubmit} className="flex-1 relative w-full">
-          <Search className="w-3.5 h-3.5 text-[#413B32]/50 absolute left-2.5 top-2.5" />
+          <Search className="w-4 h-4 text-[#666059] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search authority members by name, email, or role..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full bg-[#F1EADE]/40 border border-[#D9D1C5] rounded-xs pl-8 pr-3 py-1.5 text-xs text-[#413B32] focus:outline-none focus:border-[#413B32]"
+            className="w-full bg-[#F9F8F6] border border-[#E6E2DC] rounded-md pl-9 pr-3 py-2 text-xs text-[#25221F] focus:outline-none focus:border-[#C87A57]"
           />
         </form>
 
         <select
           value={roleFilter}
           onChange={e => setRoleFilter(e.target.value)}
-          className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs px-2.5 py-1.5 text-xs font-mono text-[#413B32] w-full sm:w-auto"
+          className="bg-white border border-[#E6E2DC] rounded-md px-3 py-2 text-xs text-[#25221F] w-full sm:w-auto focus:outline-none focus:border-[#C87A57]"
         >
           <option value="">All Authority Roles</option>
           <option value="admin">Administrator</option>
@@ -460,7 +456,7 @@ export const UsersPage: React.FC = () => {
         <select
           value={labFilter}
           onChange={e => setLabFilter(e.target.value)}
-          className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs px-2.5 py-1.5 text-xs font-mono text-[#413B32] w-full sm:w-auto"
+          className="bg-white border border-[#E6E2DC] rounded-md px-3 py-2 text-xs text-[#25221F] w-full sm:w-auto focus:outline-none focus:border-[#C87A57]"
         >
           <option value="">All Laboratories</option>
           {laboratories.map(lab => (
@@ -470,93 +466,93 @@ export const UsersPage: React.FC = () => {
       </div>
 
       {/* Main Users Register Table */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-        <div className="px-3.5 py-2 bg-[#F1EADE]/40 border-b border-[#D9D1C5] flex items-center justify-between font-mono text-[11px]">
-          <span className="font-bold text-[#413B32] uppercase">AUTHORITY USERS REGISTER</span>
-          <span className="text-[#413B32]/70 text-[10px]">
+      <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+        <div className="px-5 py-3 bg-[#FAF6F0] border-b border-[#E6E2DC] flex items-center justify-between text-xs">
+          <span className="font-serif-header font-semibold text-[#25221F]">Authority Users Register</span>
+          <span className="text-[#666059] text-xs font-mono">
             Showing {users.length} active authority members
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
               <tr>
-                <th className="p-2.5">User Name & Email</th>
-                <th className="p-2.5">Role</th>
-                <th className="p-2.5">Assigned Laboratory</th>
-                <th className="p-2.5">Account Status</th>
-                <th className="p-2.5">Registration Date</th>
-                <th className="p-2.5 text-right">Actions</th>
+                <th className="p-3 pl-5">User Name & Email</th>
+                <th className="p-3">Role</th>
+                <th className="p-3">Assigned Laboratory</th>
+                <th className="p-3">Account Status</th>
+                <th className="p-3">Registration Date</th>
+                <th className="p-3 pr-5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+            <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-xs text-[#413B32]/60 font-mono">
+                  <td colSpan={6} className="p-8 text-center text-xs text-[#666059]">
                     Loading authority register...
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-xs text-[#413B32]/60 font-mono">
+                  <td colSpan={6} className="p-8 text-center text-xs text-[#666059]">
                     No matching authority user records found.
                   </td>
                 </tr>
               ) : (
                 users.map(u => (
-                  <tr key={u.id} className="hover:bg-[#F1EADE]/30 transition">
-                    <td className="p-2.5">
-                      <p className="font-bold text-[#413B32]">{u.name}</p>
-                      <p className="text-[10px] font-mono text-[#413B32]/60">{u.email}</p>
+                  <tr key={u.id} className="hover:bg-[#FAF6F0]/60 transition">
+                    <td className="p-3 pl-5">
+                      <p className="font-semibold text-[#25221F]">{u.name}</p>
+                      <p className="text-[11px] font-mono text-[#666059]">{u.email}</p>
                     </td>
-                    <td className="p-2.5 font-mono">
-                      <span className={`px-2 py-0.5 rounded-xs text-[10px] font-bold border uppercase ${ROLE_BADGE_MAP[u.role] || 'bg-[#F1EADE] text-[#413B32]'}`}>
+                    <td className="p-3">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium border uppercase ${ROLE_BADGE_MAP[u.role] || 'bg-[#FAF6F0] text-[#25221F]'}`}>
                         {ROLE_DISPLAY_MAP[u.role] || u.role}
                       </span>
                     </td>
-                    <td className="p-2.5 font-mono text-[11px] text-[#413B32]/80">
+                    <td className="p-3 text-[#666059]">
                       {u.lab_name || 'Central Metrology Authority'}
                     </td>
-                    <td className="p-2.5 font-mono">
+                    <td className="p-3">
                       {u.active ? (
-                        <span className="bg-emerald-50 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                        <span className="bg-[#EBF5F1] text-[#2D5A4B] border border-[#BDE3D5] px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold">
                           ACTIVE
                         </span>
                       ) : (
-                        <span className="bg-red-50 text-red-900 border border-red-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                        <span className="bg-[#FFF5F5] text-[#9B2C2C] border border-[#F5C6C6] px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold">
                           INACTIVE
                         </span>
                       )}
                     </td>
-                    <td className="p-2.5 font-mono text-[11px] text-[#413B32]/70">
+                    <td className="p-3 font-mono text-[11px] text-[#666059]">
                       {new Date(u.created_at).toLocaleDateString()}
                     </td>
-                    <td className="p-2.5 text-right space-x-1 font-mono">
+                    <td className="p-3 pr-5 text-right space-x-1.5 font-sans">
                       <button
                         onClick={() => openEditModal(u)}
-                        className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-semibold inline-flex items-center space-x-1"
+                        className="bg-white hover:bg-[#FAF6F0] text-[#25221F] border border-[#E6E2DC] px-2.5 py-1 rounded-md text-[11px] font-medium inline-flex items-center space-x-1 transition"
                         title="Edit User Profile"
                       >
-                        <Edit className="w-3 h-3 text-[#413B32]" />
+                        <Edit className="w-3 h-3 text-[#666059]" />
                         <span>Edit</span>
                       </button>
 
                       <button
                         onClick={() => setResetPassUser(u)}
-                        className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5] px-2 py-0.5 rounded-xs text-[10px] font-semibold inline-flex items-center space-x-1"
+                        className="bg-white hover:bg-[#FAF6F0] text-[#25221F] border border-[#E6E2DC] px-2.5 py-1 rounded-md text-[11px] font-medium inline-flex items-center space-x-1 transition"
                         title="Reset Password"
                       >
-                        <Key className="w-3 h-3 text-[#413B32]" />
+                        <Key className="w-3 h-3 text-[#666059]" />
                         <span>Pass</span>
                       </button>
 
                       <button
                         onClick={() => setToggleUser(u)}
-                        className={`px-2 py-0.5 rounded-xs text-[10px] font-semibold border inline-flex items-center space-x-1 ${
+                        className={`px-2.5 py-1 rounded-md text-[11px] font-medium border inline-flex items-center space-x-1 transition ${
                           u.active
-                            ? 'bg-red-50 text-red-900 border-red-200 hover:bg-red-100'
-                            : 'bg-emerald-50 text-emerald-900 border-emerald-200 hover:bg-emerald-100'
+                            ? 'bg-[#FFF5F5] text-[#9B2C2C] border-[#F5C6C6] hover:bg-[#FFEBEB]'
+                            : 'bg-[#EBF5F1] text-[#2D5A4B] border-[#BDE3D5] hover:bg-[#E1F1EC]'
                         }`}
                         title={u.active ? 'Deactivate Account' : 'Reactivate Account'}
                       >
@@ -574,31 +570,31 @@ export const UsersPage: React.FC = () => {
 
       {/* Add User Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Create New Authority Member</h3>
-            <form onSubmit={handleCreateUser} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Create New Authority Member</h3>
+            <form onSubmit={handleCreateUser} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Full Name</label>
-                <input required type="text" value={addForm.name} onChange={e => setAddForm({ ...addForm, name: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
-                {addFormErrors.name && <p className="text-[10px] text-red-700 mt-0.5">{addFormErrors.name}</p>}
+                <label className="block text-[#25221F] font-medium mb-1">Full Name</label>
+                <input required type="text" value={addForm.name} onChange={e => setAddForm({ ...addForm, name: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
+                {addFormErrors.name && <p className="text-[10px] text-[#C54B4B] mt-0.5">{addFormErrors.name}</p>}
               </div>
 
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Official Email</label>
-                <input required type="email" value={addForm.email} onChange={e => setAddForm({ ...addForm, email: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
-                {addFormErrors.email && <p className="text-[10px] text-red-700 mt-0.5">{addFormErrors.email}</p>}
+                <label className="block text-[#25221F] font-medium mb-1">Official Email</label>
+                <input required type="email" value={addForm.email} onChange={e => setAddForm({ ...addForm, email: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
+                {addFormErrors.email && <p className="text-[10px] text-[#C54B4B] mt-0.5">{addFormErrors.email}</p>}
               </div>
 
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Temporary Password</label>
-                <input required type="password" value={addForm.password} onChange={e => setAddForm({ ...addForm, password: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
-                {addFormErrors.password && <p className="text-[10px] text-red-700 mt-0.5">{addFormErrors.password}</p>}
+                <label className="block text-[#25221F] font-medium mb-1">Temporary Password</label>
+                <input required type="password" value={addForm.password} onChange={e => setAddForm({ ...addForm, password: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
+                {addFormErrors.password && <p className="text-[10px] text-[#C54B4B] mt-0.5">{addFormErrors.password}</p>}
               </div>
 
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Authority Role</label>
-                <select value={addForm.role} onChange={e => setAddForm({ ...addForm, role: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Authority Role</label>
+                <select value={addForm.role} onChange={e => setAddForm({ ...addForm, role: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   <option value="inspector">Inspector / Tester</option>
                   <option value="reviewer">Reviewer / Approver</option>
                   <option value="lab_manager">Laboratory Manager</option>
@@ -608,20 +604,20 @@ export const UsersPage: React.FC = () => {
 
               {addForm.role !== 'admin' && (
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Assigned Laboratory</label>
-                  <select value={addForm.lab_id} onChange={e => setAddForm({ ...addForm, lab_id: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                  <label className="block text-[#25221F] font-medium mb-1">Assigned Laboratory</label>
+                  <select value={addForm.lab_id} onChange={e => setAddForm({ ...addForm, lab_id: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                     <option value="">Select Laboratory...</option>
                     {laboratories.map(lab => (
                       <option key={lab.id} value={lab.id}>{lab.name} ({lab.code})</option>
                     ))}
                   </select>
-                  {addFormErrors.lab_id && <p className="text-[10px] text-red-700 mt-0.5">{addFormErrors.lab_id}</p>}
+                  {addFormErrors.lab_id && <p className="text-[10px] text-[#C54B4B] mt-0.5">{addFormErrors.lab_id}</p>}
                 </div>
               )}
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setShowAddModal(false)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Create Member</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Create Member</button>
               </div>
             </form>
           </div>
@@ -630,21 +626,21 @@ export const UsersPage: React.FC = () => {
 
       {/* Edit User Modal */}
       {editingUser && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Edit Authority User: {editingUser.name}</h3>
-            <form onSubmit={handleUpdateUser} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Edit Authority User: {editingUser.name}</h3>
+            <form onSubmit={handleUpdateUser} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Full Name</label>
-                <input required type="text" value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Full Name</label>
+                <input required type="text" value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Email</label>
-                <input required type="email" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Email</label>
+                <input required type="email" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Role</label>
-                <select value={editForm.role} onChange={e => setEditForm({ ...editForm, role: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Role</label>
+                <select value={editForm.role} onChange={e => setEditForm({ ...editForm, role: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   <option value="inspector">Inspector / Tester</option>
                   <option value="reviewer">Reviewer / Approver</option>
                   <option value="lab_manager">Laboratory Manager</option>
@@ -653,17 +649,17 @@ export const UsersPage: React.FC = () => {
               </div>
               {editForm.role !== 'admin' && (
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Assigned Laboratory</label>
-                  <select value={editForm.lab_id} onChange={e => setEditForm({ ...editForm, lab_id: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                  <label className="block text-[#25221F] font-medium mb-1">Assigned Laboratory</label>
+                  <select value={editForm.lab_id} onChange={e => setEditForm({ ...editForm, lab_id: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                     {laboratories.map(lab => (
                       <option key={lab.id} value={lab.id}>{lab.name}</option>
                     ))}
                   </select>
                 </div>
               )}
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setEditingUser(null)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Update Profile</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setEditingUser(null)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Update Profile</button>
               </div>
             </form>
           </div>
@@ -672,14 +668,14 @@ export const UsersPage: React.FC = () => {
 
       {/* Approve User Modal */}
       {approvingUser && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Approve Registration: {approvingUser.name}</h3>
-            <form onSubmit={handleApproveRegistration} className="space-y-3 text-xs">
-              <p className="text-[#413B32]/80">Confirm authority role and laboratory scoping for this self-registered user:</p>
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-3 border-b border-[#E6E2DC] pb-2.5">Approve Registration: {approvingUser.name}</h3>
+            <form onSubmit={handleApproveRegistration} className="space-y-3.5 text-xs">
+              <p className="text-[#666059]">Confirm authority role and laboratory scoping for this self-registered user:</p>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Approved Role</label>
-                <select value={approveRole} onChange={e => setApproveRole(e.target.value)} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Approved Role</label>
+                <select value={approveRole} onChange={e => setApproveRole(e.target.value)} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   <option value="inspector">Inspector / Tester</option>
                   <option value="reviewer">Reviewer / Approver</option>
                   <option value="lab_manager">Laboratory Manager</option>
@@ -688,17 +684,17 @@ export const UsersPage: React.FC = () => {
               </div>
               {approveRole !== 'admin' && (
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Laboratory Scoping</label>
-                  <select value={approveLabId} onChange={e => setApproveLabId(e.target.value)} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                  <label className="block text-[#25221F] font-medium mb-1">Laboratory Scoping</label>
+                  <select value={approveLabId} onChange={e => setApproveLabId(e.target.value)} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                     {laboratories.map(lab => (
                       <option key={lab.id} value={lab.id}>{lab.name} ({lab.code})</option>
                     ))}
                   </select>
                 </div>
               )}
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setApprovingUser(null)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Confirm & Activate Account</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setApprovingUser(null)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#3E7B66] hover:bg-[#326453] rounded-md text-white font-medium shadow-xs">Confirm & Activate Account</button>
               </div>
             </form>
           </div>
@@ -707,20 +703,20 @@ export const UsersPage: React.FC = () => {
 
       {/* Reject User Modal */}
       {rejectingUser && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono space-y-3 text-xs">
-            <h3 className="font-bold text-xs uppercase text-red-900 border-b border-[#D9D1C5] pb-2">Reject Registration: {rejectingUser.name}</h3>
-            <p className="text-[#413B32]/80">Provide optional rejection rationale for logging:</p>
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg space-y-4 text-xs">
+            <h3 className="font-serif-header text-base font-semibold text-[#C54B4B] border-b border-[#E6E2DC] pb-2.5">Reject Registration: {rejectingUser.name}</h3>
+            <p className="text-[#666059]">Provide optional rejection rationale for logging:</p>
             <textarea
-              rows={2}
+              rows={3}
               value={rejectReason}
               onChange={e => setRejectReason(e.target.value)}
               placeholder="e.g. Unverified laboratory email domain"
-              className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-2 text-[#413B32]"
+              className="w-full bg-white border border-[#E6E2DC] rounded-md p-2.5 text-[#25221F] focus:outline-none focus:border-[#C54B4B]"
             />
-            <div className="flex justify-end space-x-2 pt-2 border-t border-[#D9D1C5]">
-              <button type="button" onClick={() => setRejectingUser(null)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-              <button type="button" onClick={handleRejectRegistration} className="px-3.5 py-1 bg-red-800 rounded-xs text-white font-bold border border-red-800">Reject Application</button>
+            <div className="flex justify-end space-x-2.5 pt-3 border-t border-[#E6E2DC]">
+              <button type="button" onClick={() => setRejectingUser(null)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+              <button type="button" onClick={handleRejectRegistration} className="px-4 py-2 bg-[#C54B4B] hover:bg-[#A83D3D] rounded-md text-white font-medium shadow-xs">Reject Application</button>
             </div>
           </div>
         </div>
@@ -728,43 +724,43 @@ export const UsersPage: React.FC = () => {
 
       {/* Reset Passphrase Modal (Pass Button Action) */}
       {resetPassUser && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono space-y-3 text-xs">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] border-b border-[#D9D1C5] pb-2">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg space-y-4 text-xs">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] border-b border-[#E6E2DC] pb-2.5">
               Reset Passphrase: {resetPassUser.name}
             </h3>
-            <p className="text-[#413B32]/80">
-              Set a new secure password for account <span className="font-bold">{resetPassUser.email}</span>:
+            <p className="text-[#666059]">
+              Set a new secure password for account <span className="font-semibold text-[#25221F]">{resetPassUser.email}</span>:
             </p>
-            <form onSubmit={handleResetPassword} className="space-y-3">
+            <form onSubmit={handleResetPassword} className="space-y-3.5">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">New Password</label>
+                <label className="block text-[#25221F] font-medium mb-1">New Password</label>
                 <input
                   required
                   type="password"
                   value={newPassword}
                   onChange={e => setNewPassword(e.target.value)}
                   placeholder="Minimum 6 characters"
-                  className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]"
+                  className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
                 />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Confirm New Password</label>
+                <label className="block text-[#25221F] font-medium mb-1">Confirm New Password</label>
                 <input
                   required
                   type="password"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]"
+                  className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]"
                 />
               </div>
               {resetPassError && (
-                <p className="text-[10px] text-red-700 bg-red-50 border border-red-200 p-1.5 rounded-xs">
+                <p className="text-[11px] text-[#C54B4B] bg-[#FFF5F5] border border-[#F5C6C6] p-2 rounded-md">
                   {resetPassError}
                 </p>
               )}
-              <div className="flex justify-end space-x-2 pt-2 border-t border-[#D9D1C5]">
+              <div className="flex justify-end space-x-2.5 pt-3 border-t border-[#E6E2DC]">
                 <button
                   type="button"
                   onClick={() => {
@@ -773,13 +769,13 @@ export const UsersPage: React.FC = () => {
                     setConfirmPassword('');
                     setResetPassError('');
                   }}
-                  className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]"
+                  className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]"
+                  className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs"
                 >
                   Update Passphrase
                 </button>
@@ -791,40 +787,40 @@ export const UsersPage: React.FC = () => {
 
       {/* Toggle Active/Inactive Status Modal (Disable/Enable Button Action) */}
       {toggleUser && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono space-y-3 text-xs">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] border-b border-[#D9D1C5] pb-2">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg space-y-4 text-xs">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] border-b border-[#E6E2DC] pb-2.5">
               {toggleUser.active ? 'Disable Account' : 'Enable Account'}: {toggleUser.name}
             </h3>
-            <p className="text-[#413B32]/80">
-              Are you sure you want to {toggleUser.active ? 'deactivate' : 'reactivate'} the authority account for <span className="font-bold">{toggleUser.name}</span> ({toggleUser.email})?
+            <p className="text-[#666059]">
+              Are you sure you want to {toggleUser.active ? 'deactivate' : 'reactivate'} the authority account for <span className="font-semibold text-[#25221F]">{toggleUser.name}</span> ({toggleUser.email})?
             </p>
             {toggleUser.active ? (
-              <div className="bg-red-50 border border-red-200 text-red-900 p-2 rounded-xs text-[11px]">
-                <AlertCircle className="w-3.5 h-3.5 inline mr-1 text-red-700" />
+              <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-3 rounded-md text-[11px]">
+                <AlertCircle className="w-4 h-4 inline mr-1.5 text-[#C54B4B]" />
                 Deactivating this user will prevent them from signing in or conducting evaluations until reactivated by an Administrator.
               </div>
             ) : (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-2 rounded-xs text-[11px]">
-                <CheckCircle2 className="w-3.5 h-3.5 inline mr-1 text-emerald-700" />
+              <div className="bg-[#EBF5F1] border border-[#BDE3D5] text-[#2D5A4B] p-3 rounded-md text-[11px]">
+                <CheckCircle2 className="w-4 h-4 inline mr-1.5 text-[#3E7B66]" />
                 Reactivating this user will grant them access according to their assigned role and laboratory.
               </div>
             )}
-            <div className="flex justify-end space-x-2 pt-2 border-t border-[#D9D1C5]">
+            <div className="flex justify-end space-x-2.5 pt-3 border-t border-[#E6E2DC]">
               <button
                 type="button"
                 onClick={() => setToggleUser(null)}
-                className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]"
+                className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleToggleStatus}
-                className={`px-3.5 py-1 rounded-xs font-bold text-white border ${
+                className={`px-4 py-2 rounded-md font-medium text-white shadow-xs ${
                   toggleUser.active
-                    ? 'bg-red-700 hover:bg-red-800 border-red-700'
-                    : 'bg-emerald-700 hover:bg-emerald-800 border-emerald-700'
+                    ? 'bg-[#C54B4B] hover:bg-[#A83D3D]'
+                    : 'bg-[#3E7B66] hover:bg-[#326453]'
                 }`}
               >
                 {toggleUser.active ? 'Confirm Disable' : 'Confirm Enable'}
@@ -836,4 +832,5 @@ export const UsersPage: React.FC = () => {
     </div>
   );
 };
+
 

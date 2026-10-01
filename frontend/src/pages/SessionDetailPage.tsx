@@ -136,62 +136,62 @@ export const SessionDetailPage: React.FC = () => {
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'draft': 
-        return 'bg-[#F1EADE] text-[#413B32] border-[#D9D1C5]';
+        return 'bg-[#FAF6F0] text-[#25221F] border-[#E6E2DC]';
       case 'submitted': 
-        return 'bg-[#A7BABA]/20 text-[#413B32] border-[#A7BABA]';
+        return 'bg-[#FAF6F0] text-[#D9822B] border-[#D9822B]';
       case 'under_review': 
-        return 'bg-amber-50 text-amber-900 border-amber-300 font-bold';
+        return 'bg-[#FAF6F0] text-[#D9822B] border-[#D9822B] font-bold';
       case 'finalized': 
-        return 'bg-emerald-50 text-emerald-900 border-emerald-300 font-bold';
+        return 'bg-[#FAF6F0] text-[#3E7B66] border-[#3E7B66] font-bold';
       default: 
-        return 'bg-[#F1EADE]/50 text-[#413B32]/70 border-[#D9D1C5]';
+        return 'bg-[#FAF6F0] text-[#25221F]/70 border-[#E6E2DC]';
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">
       {session.is_demo_data && <DemoWatermark />}
 
       {/* Header Bar */}
-      <div className="pb-2 border-b border-[#D9D1C5] flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="pb-3 border-b border-[#E6E2DC] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <button
             onClick={() => navigate(-1)}
-            className="text-xs font-mono text-[#413B32]/70 hover:text-[#413B32] inline-flex items-center space-x-1 mb-1"
+            className="text-xs font-mono text-[#25221F]/60 hover:text-[#25221F] inline-flex items-center space-x-1 mb-1"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Dashboard</span>
           </button>
-          <div className="flex items-center space-x-2.5">
-            <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-            <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-              EVALUATION SESSION: {session.session_number}
+          <div className="flex items-center space-x-3">
+            <span className="w-2.5 h-2.5 bg-[#C87A57] inline-block rounded-xs"></span>
+            <h1 className="text-xl font-serif-header font-normal tracking-tight text-[#25221F]">
+              Evaluation Session: {session.session_number}
             </h1>
-            <span className={`px-2 py-0.5 rounded-xs text-[10px] font-mono uppercase border ${getStatusBadgeClass(session.status)}`}>
+            <span className={`px-2.5 py-0.5 rounded-xs text-[10px] font-mono uppercase border ${getStatusBadgeClass(session.status)}`}>
               {session.status.replace('_', ' ')}
             </span>
           </div>
-          <p className="text-xs text-[#413B32]/70 font-mono mt-0.5">
-            INSTRUMENT: <span className="font-bold text-[#413B32]">{session.model_name}</span> (Serial: <span className="font-bold">{session.serial_number}</span>) │ Class {session.accuracy_class} │ Max: {session.max_capacity} kg │ e: {session.e} kg │ d: {session.d} kg
+          <p className="text-xs text-[#25221F]/70 font-sans mt-1">
+            Instrument: <span className="font-semibold text-[#25221F]">{session.model_name}</span> (Serial: <span className="font-mono font-semibold">{session.serial_number}</span>) │ Class {session.accuracy_class} │ Max: {session.max_capacity} kg │ e: {session.e} kg │ d: {session.d} kg
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 font-mono text-xs">
+        <div className="flex items-center space-x-2 font-sans text-xs">
           {session.status === 'draft' && (
             <button
               onClick={handleSubmitForReview}
-              className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] font-bold px-3.5 py-1.5 rounded-xs transition inline-flex items-center space-x-1.5 border border-[#413B32]"
+              className="bg-[#C87A57] hover:bg-[#b56b49] text-white font-semibold px-4 py-2 rounded-xs transition inline-flex items-center space-x-1.5 border border-[#C87A57] shadow-2xs"
             >
-              <Send className="w-3.5 h-3.5 text-[#A7BABA]" />
+              <Send className="w-3.5 h-3.5 text-white" />
               <span>Submit for Review →</span>
             </button>
           )}
 
           <button
             onClick={() => setShowReportPreview(true)}
-            className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] font-semibold px-3 py-1.5 rounded-xs border border-[#D9D1C5] inline-flex items-center space-x-1"
+            className="bg-white hover:bg-[#FAF6F0] text-[#25221F] font-medium px-3.5 py-2 rounded-xs border border-[#E6E2DC] inline-flex items-center space-x-1 shadow-2xs"
           >
-            <Eye className="w-3.5 h-3.5 text-[#413B32]" />
+            <Eye className="w-3.5 h-3.5 text-[#25221F]" />
             <span>Report Preview</span>
           </button>
 
@@ -201,18 +201,18 @@ export const SessionDetailPage: React.FC = () => {
                 href={api.getReportPdfUrl(session.id)}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-red-50 hover:bg-red-100 text-red-900 border border-red-200 px-2.5 py-1.5 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
+                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#C54B4B] border border-[#C54B4B] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
               >
-                <Download className="w-3.5 h-3.5 text-red-700" />
+                <Download className="w-3.5 h-3.5 text-[#C54B4B]" />
                 <span>PDF</span>
               </a>
               <a
                 href={api.getReportDocxUrl(session.id)}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-[#F1EADE] hover:bg-[#D9D1C5]/50 text-[#413B32] border border-[#D9D1C5] px-2.5 py-1.5 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
+                className="bg-[#FAF6F0] hover:bg-[#FAF6F0]/80 text-[#25221F] border border-[#E6E2DC] px-3 py-2 rounded-xs font-semibold inline-flex items-center space-x-1 text-xs"
               >
-                <Download className="w-3.5 h-3.5 text-[#413B32]" />
+                <Download className="w-3.5 h-3.5 text-[#25221F]" />
                 <span>DOCX</span>
               </a>
             </div>

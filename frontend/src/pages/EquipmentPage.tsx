@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import type { Equipment } from '../types';
-import { Wrench, AlertTriangle, CheckCircle, Plus } from 'lucide-react';
+import { Wrench, AlertTriangle, CheckCircle, Plus, CheckCircle2 } from 'lucide-react';
 
 export const EquipmentPage: React.FC = () => {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -39,67 +39,68 @@ export const EquipmentPage: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-xs font-mono text-[#413B32]/70">Loading Reference Standards equipment...</div>;
+  if (loading) return <div className="p-12 text-center text-xs font-mono text-[#666059]">Loading Reference Standards equipment...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#D9D1C5]">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-[#E6E2DC]">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-            <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-              Calibration Reference Equipment Registry
-            </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5]">
-              ISO/IEC 17025 STANDARDS
-            </span>
+          <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-[#666059] mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#C87A57]"></span>
+            <span>ISO/IEC 17025 Reference Standards</span>
           </div>
-          <p className="text-xs text-[#413B32]/70 font-mono mt-0.5">
+          <h1 className="font-serif-header text-2xl md:text-3xl font-semibold text-[#25221F] tracking-tight">
+            Calibration Reference Equipment Registry
+          </h1>
+          <p className="text-xs text-[#666059] mt-1">
             Tracking standard mass weight sets, thermometers, and pressure barometers with calibration alerts.
           </p>
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] font-mono text-xs px-3.5 py-1.5 rounded-xs transition inline-flex items-center space-x-1.5 border border-[#413B32]"
+          className="bg-[#C87A57] hover:bg-[#B36846] text-white font-medium text-xs px-4 py-2 rounded-md transition shadow-xs inline-flex items-center space-x-2"
         >
-          <Plus className="w-3.5 h-3.5 text-[#A7BABA]" />
+          <Plus className="w-4 h-4" />
           <span>+ Add Reference Equipment</span>
         </button>
       </div>
 
       {/* Equipment Register Table */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
+      <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+        <div className="px-5 py-3 bg-[#FAF6F0] border-b border-[#E6E2DC]">
+          <h2 className="text-sm font-semibold font-serif-header text-[#25221F]">Reference Standards Register</h2>
+        </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
               <tr>
-                <th className="p-2.5">Identifier / Code</th>
-                <th className="p-2.5">Equipment Type</th>
-                <th className="p-2.5">Calibration Cert No</th>
-                <th className="p-2.5">Calibration Date</th>
-                <th className="p-2.5">Due Date</th>
-                <th className="p-2.5 text-right">Status</th>
+                <th className="p-3 pl-5">Identifier / Code</th>
+                <th className="p-3">Equipment Type</th>
+                <th className="p-3">Calibration Cert No</th>
+                <th className="p-3">Calibration Date</th>
+                <th className="p-3">Due Date</th>
+                <th className="p-3 pr-5 text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+            <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
               {equipment.map(e => {
                 const isExpired = new Date(e.calibration_due_date) < new Date();
                 return (
-                  <tr key={e.id} className="hover:bg-[#F1EADE]/30 transition">
-                    <td className="p-2.5 font-mono font-bold text-[#413B32]">{e.identifier}</td>
-                    <td className="p-2.5 uppercase font-mono text-[11px]">{e.type.replace('_', ' ')}</td>
-                    <td className="p-2.5 font-mono">{e.calibration_cert_no}</td>
-                    <td className="p-2.5 font-mono text-[11px] text-[#413B32]/70">{e.calibration_date}</td>
-                    <td className="p-2.5 font-mono text-[11px] font-bold">{e.calibration_due_date}</td>
-                    <td className="p-2.5 text-right font-mono">
+                  <tr key={e.id} className="hover:bg-[#FAF6F0]/60 transition">
+                    <td className="p-3 pl-5 font-mono font-semibold text-[#25221F]">{e.identifier}</td>
+                    <td className="p-3 font-mono text-[11px] text-[#666059] uppercase">{e.type.replace('_', ' ')}</td>
+                    <td className="p-3 font-mono font-medium">{e.calibration_cert_no}</td>
+                    <td className="p-3 font-mono text-[11px] text-[#666059]">{e.calibration_date}</td>
+                    <td className="p-3 font-mono text-[11px] font-semibold text-[#25221F]">{e.calibration_due_date}</td>
+                    <td className="p-3 pr-5 text-right font-mono">
                       {isExpired ? (
-                        <span className="bg-red-50 text-red-900 border border-red-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                        <span className="bg-[#FFF5F5] text-[#9B2C2C] border border-[#F5C6C6] px-2.5 py-0.5 rounded-full text-[10px] font-semibold">
                           EXPIRED
                         </span>
                       ) : (
-                        <span className="bg-emerald-50 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-xs text-[10px] font-bold">
+                        <span className="bg-[#EBF5F1] text-[#2D5A4B] border border-[#BDE3D5] px-2.5 py-0.5 rounded-full text-[10px] font-semibold">
                           VALID & CALIBRATED
                         </span>
                       )}
@@ -114,17 +115,17 @@ export const EquipmentPage: React.FC = () => {
 
       {/* Add Equipment Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-[#413B32]/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-5 max-w-md w-full text-[#413B32] shadow-md font-mono">
-            <h3 className="font-bold text-xs uppercase text-[#413B32] mb-3 border-b border-[#D9D1C5] pb-2">Add Reference Standard Equipment</h3>
-            <form onSubmit={handleCreateEquip} className="space-y-3 text-xs">
+        <div className="fixed inset-0 bg-[#25221F]/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-[#E6E2DC] rounded-xl p-6 max-w-md w-full text-[#25221F] shadow-lg">
+            <h3 className="font-serif-header text-base font-semibold text-[#25221F] mb-4 border-b border-[#E6E2DC] pb-2.5">Add Reference Standard Equipment</h3>
+            <form onSubmit={handleCreateEquip} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Equipment Identifier</label>
-                <input required type="text" placeholder="e.g. STD-MASS-F1-001" value={newEq.identifier} onChange={e => setNewEq({ ...newEq, identifier: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Equipment Identifier</label>
+                <input required type="text" placeholder="e.g. STD-MASS-F1-001" value={newEq.identifier} onChange={e => setNewEq({ ...newEq, identifier: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Equipment Type</label>
-                <select value={newEq.type} onChange={e => setNewEq({ ...newEq, type: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]">
+                <label className="block text-[#25221F] font-medium mb-1">Equipment Type</label>
+                <select value={newEq.type} onChange={e => setNewEq({ ...newEq, type: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]">
                   <option value="standard_weight">Standard Mass Weights (E2/F1/F2/M1)</option>
                   <option value="thermometer">Reference Thermometer</option>
                   <option value="barometer">Reference Barometer / Pressure Gauge</option>
@@ -132,22 +133,22 @@ export const EquipmentPage: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-[#413B32]/70 mb-1">Calibration Certificate No.</label>
-                <input required type="text" value={newEq.calibration_cert_no} onChange={e => setNewEq({ ...newEq, calibration_cert_no: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                <label className="block text-[#25221F] font-medium mb-1">Calibration Certificate No.</label>
+                <input required type="text" value={newEq.calibration_cert_no} onChange={e => setNewEq({ ...newEq, calibration_cert_no: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Calibration Date</label>
-                  <input required type="date" value={newEq.calibration_date} onChange={e => setNewEq({ ...newEq, calibration_date: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">Calibration Date</label>
+                  <input required type="date" value={newEq.calibration_date} onChange={e => setNewEq({ ...newEq, calibration_date: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
                 <div>
-                  <label className="block text-[#413B32]/70 mb-1">Due Date</label>
-                  <input required type="date" value={newEq.calibration_due_date} onChange={e => setNewEq({ ...newEq, calibration_due_date: e.target.value })} className="w-full bg-[#FFFFFF] border border-[#D9D1C5] rounded-xs p-1.5 text-[#413B32]" />
+                  <label className="block text-[#25221F] font-medium mb-1">Due Date</label>
+                  <input required type="date" value={newEq.calibration_due_date} onChange={e => setNewEq({ ...newEq, calibration_due_date: e.target.value })} className="w-full bg-white border border-[#E6E2DC] rounded-md p-2 text-[#25221F] focus:outline-none focus:border-[#C87A57]" />
                 </div>
               </div>
-              <div className="flex justify-end space-x-2 pt-3 border-t border-[#D9D1C5]">
-                <button type="button" onClick={() => setShowModal(false)} className="px-3 py-1 bg-[#F1EADE] rounded-xs border border-[#D9D1C5] text-[#413B32]">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-[#413B32] rounded-xs text-[#F1EADE] font-bold border border-[#413B32]">Save Equipment</button>
+              <div className="flex justify-end space-x-2.5 pt-4 border-t border-[#E6E2DC]">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 bg-white rounded-md border border-[#E6E2DC] text-[#25221F] font-medium">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#C87A57] hover:bg-[#B36846] rounded-md text-white font-medium shadow-xs">Save Equipment</button>
               </div>
             </form>
           </div>
@@ -156,3 +157,4 @@ export const EquipmentPage: React.FC = () => {
     </div>
   );
 };
+

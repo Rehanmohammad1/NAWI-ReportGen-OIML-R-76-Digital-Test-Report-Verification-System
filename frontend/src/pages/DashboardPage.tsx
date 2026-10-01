@@ -5,8 +5,8 @@ import { api } from '../services/api';
 import { DemoWatermark } from '../components/DemoWatermark';
 import { TestSessionProgress } from '../components/TestSessionProgress';
 import { 
-  FileText, Clock, AlertTriangle, CheckCircle, 
-  PlusCircle, ShieldCheck, ArrowRight, Users, Scale, AlertOctagon, Activity
+  FileText, Clock, AlertTriangle, CheckCircle2, 
+  PlusCircle, ShieldCheck, ArrowRight, Users, Scale, AlertOctagon, Activity, ChevronRight, Layers, FileCheck
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
@@ -35,23 +35,23 @@ export const DashboardPage: React.FC = () => {
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'draft': 
-        return 'bg-[#F1EADE] text-[#413B32] border-[#D9D1C5]';
+        return 'bg-[#F3EFEA] text-[#554F47] border-[#E6E2DC] font-medium';
       case 'submitted': 
-        return 'bg-[#A7BABA]/20 text-[#413B32] border-[#A7BABA]';
+        return 'bg-blue-50 text-blue-800 border-blue-200 font-medium';
       case 'under_review': 
-        return 'bg-amber-50 text-amber-900 border-amber-300 font-bold';
+        return 'bg-[#FFF8EE] text-[#B86200] border-[#FBE3B5] font-semibold';
       case 'finalized': 
-        return 'bg-emerald-50 text-emerald-900 border-emerald-300 font-bold';
+        return 'bg-[#EBF5F1] text-[#2D5A4B] border-[#BDE3D5] font-semibold';
       default: 
-        return 'bg-[#F1EADE]/50 text-[#413B32]/70 border-[#D9D1C5]';
+        return 'bg-[#F3EFEA] text-[#666059] border-[#E6E2DC]';
     }
   };
 
   if (loading) {
     return (
-      <div className="p-12 text-center font-mono text-xs text-[#413B32]/70 flex flex-col items-center justify-center space-y-3">
-        <div className="w-5 h-5 border-2 border-[#413B32] border-t-transparent rounded-full animate-spin"></div>
-        <span>INITIALIZING LEGAL METROLOGY LABORATORY WORKSPACE...</span>
+      <div className="p-16 text-center text-sm text-[#666059] flex flex-col items-center justify-center space-y-3">
+        <div className="w-6 h-6 border-2 border-[#C87A57] border-t-transparent rounded-full animate-spin"></div>
+        <span className="font-mono text-xs uppercase tracking-wider">Loading Legal Metrology Workspace...</span>
       </div>
     );
   }
@@ -61,33 +61,35 @@ export const DashboardPage: React.FC = () => {
   ) || [];
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto font-sans text-[#413B32]">
+    <div className="space-y-6 max-w-7xl mx-auto font-sans text-[#25221F]">
       <DemoWatermark />
 
-      {/* Institutional Header & Workspace Metadata */}
-      <div className="border-b border-[#D9D1C5] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Page Header & Actions */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-[#E6E2DC]">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-            <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-              Legal Metrology Testing Laboratory Workspace
-            </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5]">
+          <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-[#666059] mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#C87A57]"></span>
+            <span>Legal Metrology Testing Laboratory</span>
+            <span className="text-[#999289]">|</span>
+            <span className="bg-[#FAF6F0] px-2 py-0.5 rounded border border-[#E6E2DC] text-[#25221F] font-semibold">
               OIML R-76 ED. 2006
             </span>
           </div>
-          <p className="text-xs text-[#413B32]/70 font-mono mt-1">
-            OPERATOR: <span className="font-semibold text-[#413B32]">{user?.name}</span> ({user?.role.toUpperCase().replace('_', ' ')}) │ LAB: <span className="font-semibold text-[#413B32]">{user?.lab_name || 'Central Metrology Lab'}</span>
+          <h1 className="font-serif-header text-2xl md:text-3xl font-semibold text-[#25221F] tracking-tight">
+            Laboratory Executive Dashboard
+          </h1>
+          <p className="text-xs text-[#666059] mt-1">
+            Operator: <strong className="text-[#25221F]">{user?.name}</strong> ({user?.role.toUpperCase().replace('_', ' ')}) &nbsp;&bull;&nbsp; Facility: <strong className="text-[#25221F]">{user?.lab_name || 'Central Metrology Lab'}</strong>
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           {(user?.role === 'inspector' || user?.role === 'lab_manager' || user?.role === 'admin') && (
             <NavLink
               to="/sessions/new"
-              className="bg-[#413B32] hover:bg-[#413B32]/90 text-[#F1EADE] font-mono text-xs px-3.5 py-1.5 rounded-sm transition flex items-center space-x-1.5 border border-[#413B32]"
+              className="bg-[#C87A57] hover:bg-[#B36846] text-white font-medium text-xs px-4 py-2 rounded-md transition shadow-xs flex items-center space-x-2"
             >
-              <PlusCircle className="w-3.5 h-3.5 text-[#A7BABA]" />
+              <PlusCircle className="w-4 h-4" />
               <span>+ New Evaluation</span>
             </NavLink>
           )}
@@ -95,42 +97,70 @@ export const DashboardPage: React.FC = () => {
           {(user?.role === 'reviewer' || user?.role === 'lab_manager' || user?.role === 'admin') && (
             <NavLink
               to="/review-queue"
-              className="bg-[#FFFFFF] hover:bg-[#F1EADE] text-[#413B32] font-mono text-xs px-3.5 py-1.5 rounded-sm transition flex items-center space-x-1.5 border border-[#D9D1C5]"
+              className="bg-white hover:bg-[#FAF6F0] text-[#25221F] font-medium text-xs px-4 py-2 rounded-md transition border border-[#E6E2DC] shadow-2xs flex items-center space-x-2"
             >
-              <CheckCircle className="w-3.5 h-3.5 text-[#413B32]" />
+              <CheckCircle2 className="w-4 h-4 text-[#C87A57]" />
               <span>Review Queue ({reviewQueue.length || summary?.under_review_count || 0})</span>
             </NavLink>
           )}
         </div>
       </div>
 
-      {/* Compact Laboratory Metric Strip (Replaces 5 floating cards) */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-3 shadow-2xs">
-        <div className="grid grid-cols-2 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-[#D9D1C5]/60 gap-3 md:gap-0">
-          <div className="px-3 py-1 flex items-center justify-between md:block">
-            <span className="text-[10px] font-mono font-semibold uppercase text-[#413B32]/70 block">Total Evaluations</span>
-            <span className="text-lg font-bold font-mono text-[#413B32]">{summary?.total_sessions || 0}</span>
+      {/* KPI Cards Strip */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
+        <div className="bg-white border border-[#E6E2DC] rounded-lg p-4 shadow-2xs">
+          <div className="flex items-center justify-between text-[#666059] mb-1">
+            <span className="text-xs font-medium uppercase tracking-wider">Total Evaluations</span>
+            <FileText className="w-4 h-4 text-[#C87A57]" />
           </div>
+          <div className="text-2xl font-serif-header font-bold text-[#25221F]">
+            {summary?.total_sessions || 0}
+          </div>
+          <span className="text-[10px] text-[#666059] font-sans">Registered test records</span>
+        </div>
 
-          <div className="px-3 py-1 flex items-center justify-between md:block">
-            <span className="text-[10px] font-mono font-semibold uppercase text-[#413B32]/70 block">Draft Sessions</span>
-            <span className="text-lg font-bold font-mono text-[#413B32]">{summary?.draft_count || 0}</span>
+        <div className="bg-white border border-[#E6E2DC] rounded-lg p-4 shadow-2xs">
+          <div className="flex items-center justify-between text-[#666059] mb-1">
+            <span className="text-xs font-medium uppercase tracking-wider">Draft Sessions</span>
+            <Clock className="w-4 h-4 text-[#666059]" />
           </div>
+          <div className="text-2xl font-serif-header font-bold text-[#25221F]">
+            {summary?.draft_count || 0}
+          </div>
+          <span className="text-[10px] text-[#666059] font-sans">In-progress evaluations</span>
+        </div>
 
-          <div className="px-3 py-1 flex items-center justify-between md:block">
-            <span className="text-[10px] font-mono font-semibold uppercase text-amber-900 block">Pending Review</span>
-            <span className="text-lg font-bold font-mono text-amber-900">{summary?.under_review_count || 0}</span>
+        <div className="bg-white border border-[#FBE3B5] rounded-lg p-4 shadow-2xs bg-[#FFFDF9]">
+          <div className="flex items-center justify-between text-[#B86200] mb-1">
+            <span className="text-xs font-semibold uppercase tracking-wider">Pending Review</span>
+            <AlertTriangle className="w-4 h-4 text-[#D9822B]" />
           </div>
+          <div className="text-2xl font-serif-header font-bold text-[#B86200]">
+            {summary?.under_review_count || 0}
+          </div>
+          <span className="text-[10px] text-[#B86200]/80 font-sans">Awaiting approval</span>
+        </div>
 
-          <div className="px-3 py-1 flex items-center justify-between md:block">
-            <span className="text-[10px] font-mono font-semibold uppercase text-emerald-900 block">Finalized Reports</span>
-            <span className="text-lg font-bold font-mono text-emerald-900">{summary?.finalized_count || 0}</span>
+        <div className="bg-white border border-[#BDE3D5] rounded-lg p-4 shadow-2xs bg-[#F7FCFA]">
+          <div className="flex items-center justify-between text-[#2D5A4B] mb-1">
+            <span className="text-xs font-semibold uppercase tracking-wider">Finalized Reports</span>
+            <ShieldCheck className="w-4 h-4 text-[#3E7B66]" />
           </div>
+          <div className="text-2xl font-serif-header font-bold text-[#2D5A4B]">
+            {summary?.finalized_count || 0}
+          </div>
+          <span className="text-[10px] text-[#2D5A4B]/80 font-sans">Issued & signed</span>
+        </div>
 
-          <div className="px-3 py-1 flex items-center justify-between md:block">
-            <span className="text-[10px] font-mono font-semibold uppercase text-red-900 block">Expired Standards</span>
-            <span className="text-lg font-bold font-mono text-red-800">{summary?.expired_equipment_count || 0}</span>
+        <div className="bg-white border border-[#F5C6C6] rounded-lg p-4 shadow-2xs bg-[#FFFDFD]">
+          <div className="flex items-center justify-between text-[#C54B4B] mb-1">
+            <span className="text-xs font-semibold uppercase tracking-wider">Expired Standards</span>
+            <AlertOctagon className="w-4 h-4 text-[#C54B4B]" />
           </div>
+          <div className="text-2xl font-serif-header font-bold text-[#C54B4B]">
+            {summary?.expired_equipment_count || 0}
+          </div>
+          <span className="text-[10px] text-[#C54B4B]/80 font-sans">Calibration overdue</span>
         </div>
       </div>
 
@@ -139,73 +169,73 @@ export const DashboardPage: React.FC = () => {
 
       {/* Reference Standards Calibration Warning */}
       {summary?.expired_equipment_count > 0 && (
-        <div className="bg-red-50/80 border border-red-200 rounded-sm p-2.5 text-xs text-red-900 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <AlertOctagon className="w-4 h-4 text-red-700 flex-shrink-0" />
+        <div className="bg-[#FFF5F5] border border-[#F5C6C6] rounded-md p-3 text-xs text-[#9B2C2C] flex items-center justify-between shadow-2xs">
+          <div className="flex items-center space-x-2.5">
+            <AlertOctagon className="w-4 h-4 text-[#C54B4B] flex-shrink-0" />
             <span>
               <strong>Calibration Alert:</strong> {summary.expired_equipment_count} reference standard weight equipment item(s) are past calibration due date.
             </span>
           </div>
-          <NavLink to="/equipment" className="font-mono text-[11px] underline hover:text-red-700 font-semibold">
-            View Standards →
+          <NavLink to="/equipment" className="text-xs font-medium text-[#C54B4B] hover:underline flex items-center gap-1">
+            View Standards <ArrowRight className="w-3 h-3" />
           </NavLink>
         </div>
       )}
 
-      {/* Workspace Register Tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      {/* Workspace Tables & Side Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Left 2-Column: Active Sessions & Recent Test Reports */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className="lg:col-span-2 space-y-6">
           
           {/* Active Test Sessions Table */}
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-            <div className="px-4 py-2.5 border-b border-[#D9D1C5] bg-[#F1EADE]/40 flex items-center justify-between">
-              <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase tracking-wider flex items-center gap-1.5">
-                <Activity className="w-3.5 h-3.5 text-[#413B32]" />
+          <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+            <div className="px-5 py-3 border-b border-[#E6E2DC] bg-[#FAF6F0] flex items-center justify-between">
+              <h2 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center gap-2">
+                <Activity className="w-4 h-4 text-[#C87A57]" />
                 Active Evaluation Sessions
               </h2>
               <NavLink
                 to="/sessions/new"
-                className="text-[11px] font-mono text-[#413B32] hover:underline"
+                className="text-xs font-medium text-[#C87A57] hover:underline flex items-center gap-1"
               >
                 + Create Session
               </NavLink>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
                   <tr>
-                    <th className="p-2.5">Session Ref</th>
-                    <th className="p-2.5">Model</th>
-                    <th className="p-2.5">Serial No</th>
-                    <th className="p-2.5">Status</th>
-                    <th className="p-2.5 text-right">Action</th>
+                    <th className="p-3 pl-5">Session Ref</th>
+                    <th className="p-3">Model</th>
+                    <th className="p-3">Serial No</th>
+                    <th className="p-3">Status</th>
+                    <th className="p-3 pr-5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+                <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
                   {activeSessions.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="p-4 text-center text-xs text-[#413B32]/60 font-mono">
+                      <td colSpan={5} className="p-6 text-center text-xs text-[#666059]">
                         No active in-progress test sessions. Click "+ New Evaluation" to start.
                       </td>
                     </tr>
                   ) : (
                     activeSessions.map((s: any) => (
-                      <tr key={s.id} className="hover:bg-[#F1EADE]/30 transition">
-                        <td className="p-2.5 font-mono font-bold">{s.session_number}</td>
-                        <td className="p-2.5">{s.model_name}</td>
-                        <td className="p-2.5 font-mono text-[11px]">{s.serial_number}</td>
-                        <td className="p-2.5">
-                          <span className={`px-2 py-0.5 rounded-xs text-[10px] font-mono uppercase border ${getStatusBadgeClass(s.status)}`}>
+                      <tr key={s.id} className="hover:bg-[#FAF6F0]/60 transition">
+                        <td className="p-3 pl-5 font-mono font-semibold text-[#25221F]">{s.session_number}</td>
+                        <td className="p-3">{s.model_name}</td>
+                        <td className="p-3 font-mono text-[11px] text-[#666059]">{s.serial_number}</td>
+                        <td className="p-3">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase border ${getStatusBadgeClass(s.status)}`}>
                             {s.status.replace('_', ' ')}
                           </span>
                         </td>
-                        <td className="p-2.5 text-right">
+                        <td className="p-3 pr-5 text-right">
                           <NavLink
                             to={`/sessions/${s.id}`}
-                            className="text-[#413B32] font-mono font-semibold hover:underline text-[11px]"
+                            className="text-[#C87A57] font-medium hover:underline text-xs"
                           >
                             Open →
                           </NavLink>
@@ -219,48 +249,48 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Recent Reports Register */}
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-            <div className="px-4 py-2.5 border-b border-[#D9D1C5] bg-[#F1EADE]/40 flex items-center justify-between">
-              <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#413B32]" />
+          <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+            <div className="px-5 py-3 border-b border-[#E6E2DC] bg-[#FAF6F0] flex items-center justify-between">
+              <h2 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#3E7B66]" />
                 Recent Test Certificates
               </h2>
               <NavLink
                 to="/repository"
-                className="text-[11px] font-mono text-[#413B32] hover:underline"
+                className="text-xs font-medium text-[#C87A57] hover:underline"
               >
                 View Repository Register →
               </NavLink>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
                   <tr>
-                    <th className="p-2.5">Session Ref</th>
-                    <th className="p-2.5">Model</th>
-                    <th className="p-2.5">Status</th>
-                    <th className="p-2.5">Date</th>
-                    <th className="p-2.5 text-right">Action</th>
+                    <th className="p-3 pl-5">Session Ref</th>
+                    <th className="p-3">Model</th>
+                    <th className="p-3">Status</th>
+                    <th className="p-3">Date</th>
+                    <th className="p-3 pr-5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+                <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
                   {summary?.recent_sessions?.map((s: any) => (
-                    <tr key={s.id} className="hover:bg-[#F1EADE]/30 transition">
-                      <td className="p-2.5 font-mono font-bold">{s.session_number}</td>
-                      <td className="p-2.5">{s.model_name}</td>
-                      <td className="p-2.5">
-                        <span className={`px-2 py-0.5 rounded-xs text-[10px] font-mono uppercase border ${getStatusBadgeClass(s.status)}`}>
+                    <tr key={s.id} className="hover:bg-[#FAF6F0]/60 transition">
+                      <td className="p-3 pl-5 font-mono font-semibold text-[#25221F]">{s.session_number}</td>
+                      <td className="p-3">{s.model_name}</td>
+                      <td className="p-3">
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase border ${getStatusBadgeClass(s.status)}`}>
                           {s.status.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="p-2.5 font-mono text-[11px] text-[#413B32]/70">
+                      <td className="p-3 font-mono text-[11px] text-[#666059]">
                         {new Date(s.created_at).toLocaleDateString()}
                       </td>
-                      <td className="p-2.5 text-right">
+                      <td className="p-3 pr-5 text-right">
                         <NavLink
                           to={`/sessions/${s.id}`}
-                          className="text-[#413B32] font-mono font-semibold hover:underline text-[11px]"
+                          className="text-[#C87A57] font-medium hover:underline text-xs"
                         >
                           View →
                         </NavLink>
@@ -275,42 +305,42 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Right 1-Column: Review Queue & Quick Controls */}
-        <div className="space-y-5">
+        <div className="space-y-6">
 
           {/* Review Queue Register Box */}
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-            <div className="px-3.5 py-2.5 border-b border-[#D9D1C5] bg-[#F1EADE]/40 flex items-center justify-between">
-              <h3 className="text-xs font-bold font-mono text-[#413B32] uppercase tracking-wider flex items-center gap-1.5">
-                <CheckCircle className="w-3.5 h-3.5 text-amber-800" />
+          <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+            <div className="px-4 py-3 border-b border-[#E6E2DC] bg-[#FAF6F0] flex items-center justify-between">
+              <h3 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#D9822B]" />
                 Pending Review Queue
               </h3>
-              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-xs bg-amber-100 text-amber-900 border border-amber-300">
+              <span className="font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#FFF8EE] text-[#B86200] border border-[#FBE3B5]">
                 {reviewQueue.length}
               </span>
             </div>
 
-            <div className="divide-y divide-[#D9D1C5]/50">
+            <div className="divide-y divide-[#E6E2DC]">
               {reviewQueue.length === 0 ? (
-                <div className="p-4 text-center text-xs text-[#413B32]/60 font-mono">
+                <div className="p-6 text-center text-xs text-[#666059]">
                   No items in review queue.
                 </div>
               ) : (
                 reviewQueue.slice(0, 4).map((rq: any) => (
-                  <div key={rq.id} className="p-2.5 hover:bg-[#F1EADE]/30 transition space-y-1">
+                  <div key={rq.id} className="p-3.5 hover:bg-[#FAF6F0]/60 transition space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold">{rq.session_number}</span>
-                      <span className="text-[10px] font-mono text-[#413B32]/60">
+                      <span className="font-mono text-xs font-semibold text-[#25221F]">{rq.session_number}</span>
+                      <span className="text-[10px] font-mono text-[#666059]">
                         {new Date(rq.created_at).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-xs text-[#413B32]">{rq.model_name || 'NAWI Instrument'}</p>
-                    <div className="flex items-center justify-between pt-1 text-[11px]">
-                      <span className="font-mono text-[#413B32]/70">{rq.inspector_name || 'Staff'}</span>
+                    <p className="text-xs text-[#25221F]">{rq.model_name || 'NAWI Instrument'}</p>
+                    <div className="flex items-center justify-between pt-1.5 text-xs">
+                      <span className="text-[11px] text-[#666059]">Inspector: {rq.inspector_name || 'Staff'}</span>
                       <NavLink
                         to={`/sessions/${rq.id}`}
-                        className="font-mono font-semibold text-[#413B32] hover:underline"
+                        className="font-medium text-[#C87A57] hover:underline text-xs flex items-center gap-0.5"
                       >
-                        Review →
+                        Review <ChevronRight className="w-3 h-3" />
                       </NavLink>
                     </div>
                   </div>
@@ -319,10 +349,10 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {(user?.role === 'reviewer' || user?.role === 'lab_manager' || user?.role === 'admin') && (
-              <div className="p-2 border-t border-[#D9D1C5] bg-[#F1EADE]/20 text-center">
+              <div className="p-2.5 border-t border-[#E6E2DC] bg-[#FAF6F0]/50 text-center">
                 <NavLink
                   to="/review-queue"
-                  className="font-mono text-xs font-semibold text-[#413B32] hover:underline"
+                  className="text-xs font-medium text-[#C87A57] hover:underline"
                 >
                   Full Review Queue ({reviewQueue.length}) →
                 </NavLink>
@@ -331,43 +361,43 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Authority Quick Links */}
-          <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-3.5 space-y-2.5">
-            <h3 className="text-xs font-bold font-mono text-[#413B32] uppercase tracking-wider border-b border-[#D9D1C5]/60 pb-1.5">
-              Laboratory Management Quick Actions
+          <div className="bg-white border border-[#E6E2DC] rounded-lg p-4 space-y-3 shadow-2xs">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#666059] border-b border-[#E6E2DC] pb-2">
+              Laboratory Quick Actions
             </h3>
             
-            <div className="space-y-1.5 font-mono text-xs">
+            <div className="space-y-2 text-xs">
               <NavLink
                 to="/instruments"
-                className="flex items-center justify-between p-2 rounded-xs hover:bg-[#F1EADE]/50 border border-[#D9D1C5]/40 text-[#413B32] transition"
+                className="flex items-center justify-between p-2.5 rounded-md hover:bg-[#FAF6F0] border border-[#E6E2DC] text-[#25221F] transition"
               >
-                <span>Instrument Registry</span>
-                <span>→</span>
+                <span className="font-medium">Instrument Registry</span>
+                <ChevronRight className="w-4 h-4 text-[#666059]" />
               </NavLink>
 
               <NavLink
                 to="/equipment"
-                className="flex items-center justify-between p-2 rounded-xs hover:bg-[#F1EADE]/50 border border-[#D9D1C5]/40 text-[#413B32] transition"
+                className="flex items-center justify-between p-2.5 rounded-md hover:bg-[#FAF6F0] border border-[#E6E2DC] text-[#25221F] transition"
               >
-                <span>Reference Standards</span>
-                <span>→</span>
+                <span className="font-medium">Reference Standards</span>
+                <ChevronRight className="w-4 h-4 text-[#666059]" />
               </NavLink>
 
               <NavLink
                 to="/rules"
-                className="flex items-center justify-between p-2 rounded-xs hover:bg-[#F1EADE]/50 border border-[#D9D1C5]/40 text-[#413B32] transition"
+                className="flex items-center justify-between p-2.5 rounded-md hover:bg-[#FAF6F0] border border-[#E6E2DC] text-[#25221F] transition"
               >
-                <span>OIML Rule Engine</span>
-                <span>→</span>
+                <span className="font-medium">OIML Rule Engine</span>
+                <ChevronRight className="w-4 h-4 text-[#666059]" />
               </NavLink>
 
               {user?.role === 'admin' && (
                 <NavLink
                   to="/users"
-                  className="flex items-center justify-between p-2 rounded-xs bg-[#413B32] text-[#F1EADE] hover:bg-[#413B32]/90 transition"
+                  className="flex items-center justify-between p-2.5 rounded-md bg-[#25221F] text-white hover:bg-[#38332F] transition font-medium"
                 >
                   <span>User Authority ({userStats?.active_users || 0} Active)</span>
-                  <span>→</span>
+                  <ChevronRight className="w-4 h-4 text-[#C87A57]" />
                 </NavLink>
               )}
             </div>
@@ -379,3 +409,4 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 };
+

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, extractErrorMessage } from '../services/api';
 import type { RuleLimit } from '../types';
-import { ShieldAlert, Layers, AlertCircle, RefreshCw } from 'lucide-react';
+import { ShieldAlert, Layers, AlertCircle, RefreshCw, Scale, BookOpen } from 'lucide-react';
 
 export const RulesPage: React.FC = () => {
   const [limits, setLimits] = useState<RuleLimit[]>([]);
@@ -30,87 +30,85 @@ export const RulesPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-8 text-center text-xs font-mono text-[#413B32]/70 bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm max-w-7xl mx-auto">
+      <div className="p-12 text-center text-xs font-mono text-[#666059] bg-white border border-[#E6E2DC] rounded-lg max-w-7xl mx-auto">
         Loading OIML Rule Engine configuration...
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 font-sans text-[#413B32]">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">
       {/* Header */}
-      <div className="pb-2 border-b border-[#D9D1C5]">
-        <div className="flex items-center space-x-2">
-          <span className="w-2.5 h-2.5 bg-[#413B32] inline-block rounded-xs"></span>
-          <h1 className="text-base font-bold tracking-tight uppercase font-mono text-[#413B32]">
-            Versioned Rule Engine (OIML R-76)
-          </h1>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F1EADE] text-[#413B32] border border-[#D9D1C5]">
-            MPE CONFIGURATION
-          </span>
+      <div className="pb-2 border-b border-[#E6E2DC]">
+        <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-wider text-[#666059] mb-1">
+          <span className="w-2 h-2 rounded-full bg-[#C87A57]"></span>
+          <span>Regulatory Calculation Standards</span>
         </div>
-        <p className="text-xs text-[#413B32]/70 font-mono mt-0.5">
+        <h1 className="font-serif-header text-2xl md:text-3xl font-semibold text-[#25221F] tracking-tight">
+          Versioned Rule Engine (OIML R-76)
+        </h1>
+        <p className="text-xs text-[#666059] mt-1">
           Decoupled regulatory rule engine storing MPE tables and scale interval bands as versioned database configuration.
         </p>
       </div>
 
       {/* Error Notice if API failed */}
       {errorMsg && (
-        <div className="bg-red-50 border border-red-300 text-red-900 p-4 rounded-xs text-xs space-y-2 font-mono">
-          <div className="flex items-center space-x-2 font-bold text-red-800">
+        <div className="bg-[#FFF5F5] border border-[#F5C6C6] text-[#9B2C2C] p-4 rounded-lg text-xs space-y-2">
+          <div className="flex items-center space-x-2 font-semibold text-[#C54B4B]">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>OIML RULE ENGINE DATA FETCH FAILURE</span>
           </div>
           <p>{errorMsg}</p>
           <button
             onClick={fetchRulesData}
-            className="bg-red-800 hover:bg-red-900 text-white font-bold px-3 py-1 rounded-xs transition inline-flex items-center space-x-1 mt-1"
+            className="bg-[#C54B4B] hover:bg-[#A83D3D] text-white font-medium px-3 py-1.5 rounded-md transition inline-flex items-center space-x-1.5 mt-1"
           >
-            <RefreshCw className="w-3 h-3" />
+            <RefreshCw className="w-3.5 h-3.5" />
             <span>Retry Loading Rules</span>
           </button>
         </div>
       )}
 
       {/* Regulatory Constraint Warning Banner */}
-      <div className="bg-amber-50 border border-amber-300 text-amber-950 p-3.5 rounded-xs text-xs space-y-1.5 font-mono">
-        <div className="flex items-center space-x-2 font-bold text-amber-900">
-          <ShieldAlert className="w-4 h-4 text-amber-800 flex-shrink-0" />
-          <span>REGULATORY COMPLIANCE STATUS — CONFIGURATION PROVENANCE</span>
+      <div className="bg-[#FAF6F0] border border-[#E6E2DC] text-[#25221F] p-4 rounded-lg text-xs space-y-1.5 shadow-2xs">
+        <div className="flex items-center space-x-2 font-semibold text-[#C87A57]">
+          <ShieldAlert className="w-4 h-4 text-[#C87A57] flex-shrink-0" />
+          <span>Regulatory Compliance Status & Data Provenance</span>
         </div>
-        <p className="leading-relaxed text-[#413B32]">
-          Active rule limits in this installation are tagged with status: <br/>
-          <span className="font-mono bg-[#FFFFFF] text-[#413B32] px-2 py-0.5 rounded-xs border border-amber-300 font-bold inline-block mt-1">
-            "REQUIRES VERIFICATION AGAINST APPLICABLE OIML R-76 EDITION"
+        <p className="leading-relaxed text-[#666059]">
+          Active rule limits in this installation are tagged with status:{' '}
+          <span className="font-mono bg-white text-[#25221F] px-2.5 py-0.5 rounded border border-[#E6E2DC] font-semibold inline-block">
+            REQUIRES VERIFICATION AGAINST APPLICABLE OIML R-76 EDITION
           </span>
         </p>
       </div>
 
       {/* Active Rule Versions & Data Provenance */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm p-4 space-y-3">
-        <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase flex items-center space-x-2">
-          <Layers className="w-3.5 h-3.5 text-[#413B32]" />
+      <div className="bg-white border border-[#E6E2DC] rounded-lg p-5 space-y-4 shadow-2xs">
+        <h2 className="text-sm font-semibold font-serif-header text-[#25221F] flex items-center space-x-2">
+          <Layers className="w-4 h-4 text-[#C87A57]" />
           <span>Official Regulatory Data Source & Provenance</span>
         </h2>
         {versions.length === 0 ? (
-          <p className="text-xs font-mono text-[#413B32]/60 py-2">No active rule versions found in configuration database.</p>
+          <p className="text-xs text-[#666059] py-2">No active rule versions found in configuration database.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {versions.map(v => {
               const versionCode = v.version_code || v.edition_label || v.standard || `VERSION-${v.id}`;
               const statusLabel = v.status ? String(v.status).toUpperCase() : (v.is_active ? 'ACTIVE' : 'INACTIVE');
               const descriptionText = v.description || `Official Legal Metrology Regulatory Rule Version for ${v.standard || 'OIML R-76'}`;
               const citationText = v.source_citation || v.source_document || 'OIML Recommendation R 76-1 (2006 E)';
               return (
-                <div key={v.id} className="bg-[#F1EADE]/40 border border-[#D9D1C5] p-3 rounded-xs space-y-1">
+                <div key={v.id} className="bg-[#FAF6F0]/60 border border-[#E6E2DC] p-4 rounded-md space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#413B32]">{versionCode}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-xs bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold">
+                    <span className="font-serif-header text-sm font-semibold text-[#25221F]">{versionCode}</span>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#EBF5F1] text-[#2D5A4B] border border-[#BDE3D5] font-mono font-semibold">
                       {statusLabel}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#413B32]/80">{descriptionText}</p>
-                  <p className="text-[10px] text-[#413B32]/60 pt-1">Source: {citationText}</p>
+                  <p className="text-xs text-[#666059]">{descriptionText}</p>
+                  <p className="text-[11px] text-[#666059]/80 pt-1 font-mono">Source: {citationText}</p>
                 </div>
               );
             })}
@@ -119,26 +117,26 @@ export const RulesPage: React.FC = () => {
       </div>
 
       {/* MPE Table Configuration Register */}
-      <div className="bg-[#FFFFFF] border border-[#D9D1C5] rounded-sm overflow-hidden">
-        <div className="px-3.5 py-2.5 bg-[#F1EADE]/40 border-b border-[#D9D1C5]">
-          <h2 className="text-xs font-bold font-mono text-[#413B32] uppercase">Maximum Permissible Error (MPE) Limits Register</h2>
+      <div className="bg-white border border-[#E6E2DC] rounded-lg overflow-hidden shadow-2xs">
+        <div className="px-5 py-3 bg-[#FAF6F0] border-b border-[#E6E2DC]">
+          <h2 className="text-sm font-semibold font-serif-header text-[#25221F]">Maximum Permissible Error (MPE) Limits Register</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#F1EADE] text-[#413B32] font-mono font-semibold uppercase text-[10px] border-b border-[#D9D1C5]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F9F8F6] text-[#666059] font-mono font-semibold uppercase text-[10px] border-b border-[#E6E2DC]">
               <tr>
-                <th className="p-2.5">Rule Code</th>
-                <th className="p-2.5">Accuracy Class</th>
-                <th className="p-2.5">Load Range (m in e)</th>
-                <th className="p-2.5">Initial MPE (±e)</th>
-                <th className="p-2.5">In-Service MPE (±e)</th>
-                <th className="p-2.5">Evaluation Type</th>
+                <th className="p-3 pl-5">Rule Code</th>
+                <th className="p-3">Accuracy Class</th>
+                <th className="p-3">Load Range (m in e)</th>
+                <th className="p-3">Initial MPE (±e)</th>
+                <th className="p-3">In-Service MPE (±e)</th>
+                <th className="p-3 pr-5">Evaluation Type</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D1C5]/50 text-[#413B32]">
+            <tbody className="divide-y divide-[#E6E2DC] text-[#25221F]">
               {limits.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-xs text-[#413B32]/60 font-mono">
+                  <td colSpan={6} className="p-8 text-center text-xs text-[#666059]">
                     No OIML rule limits available in database configuration.
                   </td>
                 </tr>
@@ -151,15 +149,15 @@ export const RulesPage: React.FC = () => {
                   const mpeInservice = rl.mpe_inservice_e ?? rl.mpe_working_e ?? 0;
                   const evalType = (rl.evaluation_type || rl.formula_ref || 'Standard MPE').toString();
                   return (
-                    <tr key={rl.id} className="hover:bg-[#F1EADE]/30 transition">
-                      <td className="p-2.5 font-mono font-bold text-[#413B32]">{ruleCode}</td>
-                      <td className="p-2.5 font-mono">Class {rl.accuracy_class}</td>
-                      <td className="p-2.5 font-mono text-[11px]">
+                    <tr key={rl.id} className="hover:bg-[#FAF6F0]/60 transition">
+                      <td className="p-3 pl-5 font-mono font-semibold text-[#25221F]">{ruleCode}</td>
+                      <td className="p-3 font-mono font-medium">Class {rl.accuracy_class}</td>
+                      <td className="p-3 font-mono text-[11px] text-[#666059]">
                         {minLoad} e ≤ m ≤ {maxLoad} e
                       </td>
-                      <td className="p-2.5 font-mono font-bold">±{mpeInitial} e</td>
-                      <td className="p-2.5 font-mono">±{mpeInservice} e</td>
-                      <td className="p-2.5 font-mono text-[11px] uppercase">{evalType}</td>
+                      <td className="p-3 font-mono font-semibold text-[#25221F]">±{mpeInitial} e</td>
+                      <td className="p-3 font-mono text-[#666059]">±{mpeInservice} e</td>
+                      <td className="p-3 pr-5 font-mono text-[11px] text-[#666059] uppercase">{evalType}</td>
                     </tr>
                   );
                 })
@@ -171,3 +169,4 @@ export const RulesPage: React.FC = () => {
     </div>
   );
 };
+
