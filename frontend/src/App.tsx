@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
-import { Sidebar } from './components/Sidebar';
 
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -29,26 +28,23 @@ const ProtectedLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F1EADE] text-[#413B32] flex flex-col font-sans">
       <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 p-6 overflow-y-auto">
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/instruments" element={<InstrumentsPage />} />
-              <Route path="/sessions/new" element={<NewSessionPage />} />
-              <Route path="/sessions/:id" element={<SessionDetailPage />} />
-              <Route path="/review-queue" element={<ReviewQueuePage />} />
-              <Route path="/repository" element={<RepositoryPage />} />
-              <Route path="/rules" element={<RulesPage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
-              <Route path="/equipment" element={<EquipmentPage />} />
-              <Route path="/verify-public" element={<VerifyPage />} />
-            </Routes>
-          </ErrorBoundary>
-        </main>
-      </div>
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 overflow-y-auto">
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/instruments" element={<InstrumentsPage />} />
+            <Route path="/sessions/new" element={<NewSessionPage />} />
+            <Route path="/sessions/:id" element={<SessionDetailPage />} />
+            <Route path="/review-queue" element={<ReviewQueuePage />} />
+            <Route path="/repository" element={<RepositoryPage />} />
+            <Route path="/rules" element={<RulesPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/equipment" element={<EquipmentPage />} />
+            <Route path="/verify-public" element={<VerifyPage />} />
+          </Routes>
+        </ErrorBoundary>
+      </main>
     </div>
   );
 };
