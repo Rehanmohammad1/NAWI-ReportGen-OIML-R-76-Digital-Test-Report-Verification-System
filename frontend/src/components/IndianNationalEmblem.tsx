@@ -2,17 +2,32 @@ import React from 'react';
 
 interface IndianNationalEmblemProps {
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const IndianNationalEmblem: React.FC<IndianNationalEmblemProps> = ({
-  className = 'w-9 h-11 text-[#24211D] shrink-0'
+  className = '',
+  style
 }) => {
   return (
     <svg
-      className={className}
+      width="40"
+      height="48"
       viewBox="0 0 100 130"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={`shrink-0 text-black ${className}`}
+      style={{
+        width: '40px',
+        height: '48px',
+        minWidth: '40px',
+        minHeight: '48px',
+        maxWidth: '40px',
+        maxHeight: '48px',
+        flex: '0 0 40px',
+        objectFit: 'contain',
+        ...style
+      }}
       aria-label="State Emblem of India - Lion Capital of Ashoka"
     >
       <g fill="currentColor">

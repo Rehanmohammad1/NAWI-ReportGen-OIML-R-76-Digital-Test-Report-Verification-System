@@ -76,11 +76,26 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
 
   return (
     <header className="bg-[#FAF7F2] text-[#24211D] border-b border-[#E2DDD5] sticky top-0 z-40 shadow-xs font-sans" ref={headerRef}>
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div
+        className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4"
+        style={{ height: '94px', minHeight: '94px', maxHeight: '94px' }}
+      >
         
         {/* Left: Ashoka Pillar Emblem & Official Unified System Branding */}
         <div className="flex items-center space-x-3 shrink-0">
-          <IndianNationalEmblem className="w-8.5 h-11 text-black shrink-0" />
+          <IndianNationalEmblem
+            className="text-black shrink-0"
+            style={{
+              width: '40px',
+              height: '48px',
+              minWidth: '40px',
+              minHeight: '48px',
+              maxWidth: '40px',
+              maxHeight: '48px',
+              flex: '0 0 40px',
+              objectFit: 'contain'
+            }}
+          />
 
           <div>
             <h1 className="font-serif-header font-bold text-lg sm:text-xl text-[#24211D] tracking-tight leading-tight">
