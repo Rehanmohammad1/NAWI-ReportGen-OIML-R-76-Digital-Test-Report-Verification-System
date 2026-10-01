@@ -1,5 +1,30 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
+export function extractErrorMessage(errorData: any, defaultMsg: string = 'An error occurred'): string {
+  if (!errorData) return defaultMsg;
+  if (typeof errorData === 'string') return errorData;
+  if (typeof errorData.detail === 'string') return errorData.detail;
+  if (Array.isArray(errorData.detail)) {
+    const formatted = errorData.detail
+      .map((item: any) => {
+        if (typeof item === 'string') return item;
+        if (item && item.msg) {
+          const loc = Array.isArray(item.loc) ? item.loc.filter((l: any) => l !== 'body').join('.') : '';
+          return loc ? `${loc}: ${item.msg}` : item.msg;
+        }
+        return JSON.stringify(item);
+      })
+      .join(' | ');
+    return formatted || defaultMsg;
+  }
+  if (typeof errorData.detail === 'object' && errorData.detail !== null) {
+    return errorData.detail.msg || errorData.detail.message || JSON.stringify(errorData.detail);
+  }
+  if (typeof errorData.message === 'string') return errorData.message;
+  if (typeof errorData.error === 'string') return errorData.error;
+  return defaultMsg;
+}
+
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('nawi_token');
   const headers: Record<string, string> = {
@@ -17,8 +42,9 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({ detail: 'Network response was not ok' }));
-    throw new Error(errorData.detail || `HTTP Error ${res.status}`);
+    const errorData = await res.json().catch(() => ({ detail: `HTTP Error ${res.status}` }));
+    const msg = extractErrorMessage(errorData, `HTTP Error ${res.status}`);
+    throw new Error(msg);
   }
 
   return res.json();

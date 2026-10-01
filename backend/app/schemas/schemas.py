@@ -37,7 +37,8 @@ class UserRegisterRequest(BaseModel):
     name: str
     email: EmailStr
     password: str
-    requested_role: str # admin, lab_manager, inspector, reviewer
+    role: Optional[str] = None
+    requested_role: Optional[str] = None
     lab_id: Optional[int] = None
 
 class UserApproveRequest(BaseModel):

@@ -81,6 +81,7 @@ export const LoginPage: React.FC = () => {
         email: regEmail.trim(),
         password: regPassword,
         role: regRole,
+        requested_role: regRole,
         lab_id: regRole !== 'admin' && regLabId ? parseInt(regLabId, 10) : null
       });
 
@@ -94,7 +95,8 @@ export const LoginPage: React.FC = () => {
       setRegConfirmPassword('');
       setRegErrors({});
     } catch (err: any) {
-      setRegErrors({ api: err.message || 'Registration failed' });
+      const errMsg = typeof err === 'string' ? err : (err?.message || 'Registration failed');
+      setRegErrors({ api: errMsg });
     } finally {
       setLoading(false);
     }

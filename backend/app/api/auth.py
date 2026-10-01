@@ -57,15 +57,22 @@ def register(reg_data: UserRegisterRequest, db: Session = Depends(get_db)):
     if len(reg_data.password) < 6:
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters long.")
 
-    if reg_data.requested_role not in VALID_ROLES:
+    target_role = reg_data.requested_role or reg_data.role
+    if not target_role:
+        raise HTTPException(status_code=400, detail="Requested authority role is required.")
+
+    if target_role not in VALID_ROLES:
         raise HTTPException(status_code=400, detail=f"Invalid requested role. Must be one of: {', '.join(VALID_ROLES)}")
+
+    if target_role != "admin" and not reg_data.lab_id:
+        raise HTTPException(status_code=400, detail="Laboratory assignment is required for non-admin roles.")
 
     new_user = User(
         name=reg_data.name.strip(),
         email=clean_email,
         password_hash=hash_password(reg_data.password),
-        role=reg_data.requested_role,
-        lab_id=reg_data.lab_id if reg_data.requested_role != "admin" else None,
+        role=target_role,
+        lab_id=reg_data.lab_id if target_role != "admin" else None,
         status="pending",
         active=False
     )
