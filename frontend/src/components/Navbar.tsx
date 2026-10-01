@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Bell, LogOut, Shield, User as UserIcon, CheckCircle2 } from 'lucide-react';
+import { NawiLogo } from './NawiLogo';
+import { Bell, LogOut, User as UserIcon, CheckCircle2 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -47,7 +48,7 @@ export const Navbar: React.FC = () => {
         {/* Institutional Branding */}
         <div className="flex items-center space-x-3.5">
           <div className="w-9 h-9 rounded bg-[#A7BABA]/20 border border-[#A7BABA]/40 flex items-center justify-center font-mono text-[#F1EADE] shadow-xs">
-            <Shield className="w-5 h-5 text-[#A7BABA]" />
+            <NawiLogo className="w-5 h-5 text-[#F1EADE]" />
           </div>
           <div>
             <div className="flex items-center space-x-2.5">

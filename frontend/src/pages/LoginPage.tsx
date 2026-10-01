@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
+import { NawiLogo } from '../components/NawiLogo';
 import { Shield, UserCheck, AlertCircle, CheckCircle2, UserPlus, LogIn } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -115,7 +116,7 @@ export const LoginPage: React.FC = () => {
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto w-12 h-12 rounded-xs bg-[#413B32] flex items-center justify-center text-[#F1EADE] shadow-xs mb-3 border border-[#413B32]">
-            <Shield className="w-6 h-6 text-[#A7BABA]" />
+            <NawiLogo className="w-7 h-7 text-[#F1EADE]" />
           </div>
           <h1 className="text-base font-bold text-[#413B32] tracking-tight uppercase font-mono">
             SIH26035 — NAWI Compliance System

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../services/api';
+import { NawiLogo } from '../components/NawiLogo';
 import { ShieldCheck, AlertCircle, CheckCircle, Search, Lock, CheckCircle2 } from 'lucide-react';
 
 export const VerifyPage: React.FC = () => {
@@ -38,7 +39,7 @@ export const VerifyPage: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-1">
           <div className="mx-auto w-12 h-12 rounded-xs bg-[#413B32] flex items-center justify-center text-[#F1EADE] shadow-xs mb-2 border border-[#413B32]">
-            <ShieldCheck className="w-6 h-6 text-[#A7BABA]" />
+            <NawiLogo className="w-7 h-7 text-[#F1EADE]" />
           </div>
           <h1 className="text-base font-bold text-[#413B32] tracking-tight uppercase font-mono">
             LEGAL METROLOGY REPORT VERIFICATION
