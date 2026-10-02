@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import type { Instrument, Equipment } from '../types';
 import { TestSessionProgress } from '../components/TestSessionProgress';
@@ -7,6 +8,7 @@ import { PlusCircle, AlertTriangle, Info, ArrowRight, ArrowLeft } from 'lucide-r
 
 export const NewSessionPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user, activeLabId } = useAuth();
   const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
   const [selectedInstId, setSelectedInstId] = useState<number | null>(null);
@@ -17,16 +19,18 @@ export const NewSessionPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Promise.all([api.getInstruments(), api.getEquipment()])
+    Promise.all([api.getInstruments(activeLabId), api.getEquipment(activeLabId)])
       .then(([insts, eq]) => {
         setInstruments(insts);
         setEquipmentList(eq);
         if (insts.length > 0) {
           setSelectedInstId(insts[0].id);
+        } else {
+          setSelectedInstId(null);
         }
       })
       .catch(console.error);
-  }, []);
+  }, [activeLabId]);
 
   useEffect(() => {
     if (selectedInstId) {
@@ -51,9 +55,10 @@ export const NewSessionPage: React.FC = () => {
     setLoading(true);
     try {
       const instObj = instruments.find(i => i.id === selectedInstId);
+      const targetLabId = activeLabId || user?.lab_id || 1;
       const res = await api.createSession({
         instrument_id: selectedInstId,
-        lab_id: 1,
+        lab_id: targetLabId,
         equipment_ids: selectedEquipIds,
         rule_version_id: 1,
         environmental_conditions: env,

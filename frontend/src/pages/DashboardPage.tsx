@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, activeLabId, activeLabName } = useAuth();
   const navigate = useNavigate();
   const [summary, setSummary] = useState<any>(null);
   const [reviewQueue, setReviewQueue] = useState<any[]>([]);
@@ -17,10 +17,11 @@ export const DashboardPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    setLoading(true);
     Promise.all([
-      api.getDashboardSummary().catch(() => null),
+      api.getDashboardSummary(activeLabId).catch(() => null),
       (user?.role === 'reviewer' || user?.role === 'lab_manager' || user?.role === 'admin') 
-        ? api.getSessions('under_review').catch(() => []) 
+        ? api.getSessions('under_review', activeLabId).catch(() => []) 
         : Promise.resolve([])
     ]).then(([dashData, rQueue]) => {
       setSummary(dashData);
@@ -28,7 +29,7 @@ export const DashboardPage: React.FC = () => {
     })
     .catch(console.error)
     .finally(() => setLoading(false));
-  }, [user?.role]);
+  }, [user?.role, activeLabId]);
 
   const renderStatusBadge = (status: string) => {
     switch (status) {

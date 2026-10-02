@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import type { Equipment } from '../types';
 import { Wrench, AlertTriangle, CheckCircle, Plus, CheckCircle2 } from 'lucide-react';
 
 export const EquipmentPage: React.FC = () => {
+  const { user, activeLabId } = useAuth();
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newEq, setNewEq] = useState({
-    lab_id: 1, type: 'standard_weight', identifier: '',
+    lab_id: activeLabId || user?.lab_id || 1, type: 'standard_weight', identifier: '',
     calibration_cert_no: '', calibration_date: '2025-01-01', calibration_due_date: '2027-01-01'
   });
 
   const loadEquip = async () => {
     try {
       setLoading(true);
-      const data = await api.getEquipment();
+      const data = await api.getEquipment(activeLabId);
       setEquipment(data);
     } catch (err: any) {
       console.error(err);
@@ -25,8 +27,9 @@ export const EquipmentPage: React.FC = () => {
   };
 
   useEffect(() => {
+    setNewEq(prev => ({ ...prev, lab_id: activeLabId || user?.lab_id || 1 }));
     loadEquip();
-  }, []);
+  }, [activeLabId]);
 
   const handleCreateEquip = async (e: React.FormEvent) => {
     e.preventDefault();

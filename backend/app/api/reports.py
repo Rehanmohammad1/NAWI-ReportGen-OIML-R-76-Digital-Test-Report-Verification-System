@@ -21,6 +21,7 @@ def search_reports(
     manufacturer_id: Optional[int] = None,
     result_filter: Optional[str] = None, # PASS / FAIL
     search_query: Optional[str] = None,
+    lab_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -29,6 +30,8 @@ def search_reports(
     # Row level laboratory scoping
     if current_user.role != "admin" and current_user.lab_id:
         query = query.filter(TestSession.lab_id == current_user.lab_id)
+    elif lab_id:
+        query = query.filter(TestSession.lab_id == lab_id)
 
     if status_filter:
         query = query.filter(TestSession.status == status_filter)

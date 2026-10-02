@@ -37,6 +37,7 @@ export function extractErrorMessage(errorData: any, defaultMsg: string = 'An err
 
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('nawi_token');
+  const activeLabId = localStorage.getItem('nawi_active_lab_id');
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string> || {}),
@@ -44,6 +45,9 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+  if (activeLabId && activeLabId !== 'null') {
+    headers['X-Laboratory-Id'] = activeLabId;
   }
 
   let res: Response;
@@ -115,12 +119,18 @@ export const api = {
   createManufacturer: (data: any) => fetchApi('/instruments/manufacturers', { method: 'POST', body: JSON.stringify(data) }),
   getModels: () => fetchApi('/instruments/models'),
   createModel: (data: any) => fetchApi('/instruments/models', { method: 'POST', body: JSON.stringify(data) }),
-  getInstruments: () => fetchApi('/instruments'),
+  getInstruments: (labId?: number | null) => fetchApi(`/instruments${labId ? `?lab_id=${labId}` : ''}`),
   registerInstrument: (data: any) => fetchApi('/instruments', { method: 'POST', body: JSON.stringify(data) }),
   suggestTests: (modelId: number) => fetchApi(`/instruments/suggest-tests/${modelId}`),
 
   // Sessions
-  getSessions: (statusFilter?: string) => fetchApi(`/sessions${statusFilter ? `?status_filter=${statusFilter}` : ''}`),
+  getSessions: (statusFilter?: string, labId?: number | null) => {
+    const params = new URLSearchParams();
+    if (statusFilter) params.append('status_filter', statusFilter);
+    if (labId !== undefined && labId !== null) params.append('lab_id', String(labId));
+    const queryStr = params.toString();
+    return fetchApi(`/sessions${queryStr ? `?${queryStr}` : ''}`);
+  },
   getSession: (id: number) => fetchApi(`/sessions/${id}`),
   createSession: (data: any) => fetchApi('/sessions', { method: 'POST', body: JSON.stringify(data) }),
   enterObservation: (sessionId: number, data: any) => fetchApi(`/sessions/${sessionId}/observations`, { method: 'POST', body: JSON.stringify(data) }),
@@ -128,7 +138,12 @@ export const api = {
   reviewSession: (sessionId: number, data: any) => fetchApi(`/sessions/${sessionId}/review`, { method: 'POST', body: JSON.stringify(data) }),
 
   // Reports
-  searchReports: (params?: string) => fetchApi(`/reports${params ? `?${params}` : ''}`),
+  searchReports: (params?: string, labId?: number | null) => {
+    const searchParams = new URLSearchParams(params || '');
+    if (labId !== undefined && labId !== null) searchParams.append('lab_id', String(labId));
+    const queryStr = searchParams.toString();
+    return fetchApi(`/reports${queryStr ? `?${queryStr}` : ''}`);
+  },
   getReportPdfUrl: (reportId: number) => `${API_BASE_URL}/reports/${reportId}/download/pdf`,
   getReportDocxUrl: (reportId: number) => `${API_BASE_URL}/reports/${reportId}/download/docx`,
   getReportCsvUrl: () => `${API_BASE_URL}/reports/export/csv`,
@@ -143,12 +158,12 @@ export const api = {
   getRuleLimits: (versionId?: number) => fetchApi(`/rules/limits${versionId ? `?version_id=${versionId}` : ''}`),
 
   // Equipment
-  getEquipment: () => fetchApi('/equipment'),
+  getEquipment: (labId?: number | null) => fetchApi(`/equipment${labId ? `?lab_id=${labId}` : ''}`),
   createEquipment: (data: any) => fetchApi('/equipment', { method: 'POST', body: JSON.stringify(data) }),
 
   // Analytics
-  getDashboardSummary: () => fetchApi('/analytics/dashboard-summary'),
-  getFailurePatterns: () => fetchApi('/analytics/failure-patterns'),
+  getDashboardSummary: (labId?: number | null) => fetchApi(`/analytics/dashboard-summary${labId ? `?lab_id=${labId}` : ''}`),
+  getFailurePatterns: (labId?: number | null) => fetchApi(`/analytics/failure-patterns${labId ? `?lab_id=${labId}` : ''}`),
   getInstrumentHistory: (modelId: number) => fetchApi(`/analytics/instrument-history/${modelId}`),
 
   // Notifications

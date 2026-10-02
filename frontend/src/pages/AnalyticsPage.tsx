@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { BarChart3, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts';
 
 export const AnalyticsPage: React.FC = () => {
+  const { activeLabId } = useAuth();
   const [failures, setFailures] = useState<any>(null);
   const [history, setHistory] = useState<any>(null);
   const [models, setModels] = useState<any[]>([]);
@@ -12,14 +14,14 @@ export const AnalyticsPage: React.FC = () => {
 
   useEffect(() => {
     Promise.all([
-      api.getFailurePatterns(),
+      api.getFailurePatterns(activeLabId),
       api.getModels()
     ]).then(([fData, mData]) => {
       setFailures(fData);
       setModels(mData);
       if (mData.length > 0) setSelectedModelId(mData[0].id);
     }).catch(console.error).finally(() => setLoading(false));
-  }, []);
+  }, [activeLabId]);
 
   useEffect(() => {
     if (selectedModelId) {

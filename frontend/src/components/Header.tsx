@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Bell, LogOut, Building2, ChevronDown, Check } from 'lucide-react';
+import { Bell, LogOut, ChevronDown } from 'lucide-react';
 import { IndianNationalEmblem } from './IndianNationalEmblem';
 
 interface HeaderProps {
@@ -13,11 +13,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  
-  // Laboratory selector state
-  const [selectedLab, setSelectedLab] = useState<string>(user?.lab_name || 'Delhi Central Legal Metrology Laboratory');
-  const [showLabDropdown, setShowLabDropdown] = useState(false);
-  const [laboratories, setLaboratories] = useState<any[]>([]);
 
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -25,14 +20,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
     if (user) {
       api.getNotifications()
         .then(data => setNotifications(data))
-        .catch(() => {});
-
-      api.getPublicLaboratories()
-        .then(labs => {
-          if (Array.isArray(labs) && labs.length > 0) {
-            setLaboratories(labs);
-          }
-        })
         .catch(() => {});
     }
   }, [user]);
@@ -42,7 +29,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
         setShowNotifications(false);
         setShowUserMenu(false);
-        setShowLabDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -67,12 +53,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
     minute: '2-digit',
     hour12: true
   });
-
-  const availableLabs = laboratories.length > 0 ? laboratories : [
-    { id: 1, name: 'Delhi Central Legal Metrology Laboratory', code: 'DEL-01' },
-    { id: 2, name: 'Mumbai Regional Metrology Laboratory', code: 'MUM-02' },
-    { id: 3, name: 'Kolkata Metrology Testing Center', code: 'KOL-03' }
-  ];
 
   return (
     <header className="bg-[#FAF7F2] text-[#24211D] border-b border-[#E2DDD5] sticky top-0 z-40 shadow-xs font-sans" ref={headerRef}>
@@ -149,49 +129,9 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu }) => {
 
         </div>
 
-        {/* Right: Functional Laboratory Selector, Notifications, User Profile & Date/Time */}
+        {/* Right: Notifications, User Profile & Date/Time */}
         {user && (
           <div className="flex items-center space-x-4 shrink-0">
-            
-            {/* Functional Laboratory Context Selector */}
-            <div className="relative hidden xl:block">
-              <button
-                onClick={() => setShowLabDropdown(!showLabDropdown)}
-                className="flex items-center space-x-2 text-xs font-semibold text-[#24211D] bg-[#EFEAE2] hover:bg-[#E5DDD2] px-3 py-1.5 rounded-md border border-[#E2DDD5] transition shadow-2xs"
-                title="Select Active Laboratory Context"
-              >
-                <Building2 className="w-4 h-4 text-[#8C8275]" />
-                <span className="truncate max-w-[200px]">{selectedLab}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#8C8275] shrink-0" />
-              </button>
-
-              {showLabDropdown && (
-                <div className="absolute right-0 mt-2 w-80 bg-white border border-[#E2DDD5] rounded-xl shadow-xl py-2 z-50 text-xs text-[#24211D]">
-                  <div className="px-4 py-2 border-b border-[#E2DDD5] font-mono text-[10px] uppercase font-bold text-[#8C8275] bg-[#FAF7F2]">
-                    Active Laboratory Context
-                  </div>
-                  <div className="max-h-56 overflow-y-auto divide-y divide-[#E2DDD5]">
-                    {availableLabs.map(lab => (
-                      <button
-                        key={lab.id}
-                        onClick={() => {
-                          setSelectedLab(lab.name);
-                          setShowLabDropdown(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 hover:bg-[#FAF7F2] transition flex items-center justify-between text-xs ${selectedLab === lab.name ? 'font-bold bg-[#FAF7F2] text-[#9C5A3C]' : ''}`}
-                      >
-                        <span className="truncate pr-2">{lab.name}</span>
-                        {selectedLab === lab.name ? (
-                          <Check className="w-4 h-4 text-[#9C5A3C] shrink-0" />
-                        ) : (
-                          lab.code && <span className="font-mono text-[10px] text-[#8C8275] shrink-0">{lab.code}</span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Notifications Dropdown */}
             <div className="relative">

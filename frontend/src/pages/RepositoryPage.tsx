@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import type { ReportItem } from '../types';
 import { Download, Search, FileSpreadsheet, Code, ShieldCheck, FileText, Filter } from 'lucide-react';
 
 export const RepositoryPage: React.FC = () => {
+  const { activeLabId } = useAuth();
   const [reports, setReports] = useState<ReportItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,7 +20,7 @@ export const RepositoryPage: React.FC = () => {
       if (accuracyClass) params.push(`accuracy_class=${accuracyClass}`);
       if (resultFilter) params.push(`result_filter=${resultFilter}`);
 
-      const data = await api.searchReports(params.join('&'));
+      const data = await api.searchReports(params.join('&'), activeLabId);
       setReports(data);
     } catch (err: any) {
       console.error(err);
@@ -29,7 +31,7 @@ export const RepositoryPage: React.FC = () => {
 
   useEffect(() => {
     loadReports();
-  }, [searchQuery, accuracyClass, resultFilter]);
+  }, [searchQuery, accuracyClass, resultFilter, activeLabId]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 font-sans text-[#25221F]">

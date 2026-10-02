@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import type { InstrumentModel, Instrument, Manufacturer } from '../types';
 import { Scale, AlertCircle, CheckCircle, Info, Plus, CheckCircle2, Building, Layers } from 'lucide-react';
 
 export const InstrumentsPage: React.FC = () => {
+  const { activeLabId } = useAuth();
   const [models, setModels] = useState<InstrumentModel[]>([]);
   const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
@@ -32,7 +34,7 @@ export const InstrumentsPage: React.FC = () => {
       const [mfgData, modelData, instData] = await Promise.all([
         api.getManufacturers(),
         api.getModels(),
-        api.getInstruments()
+        api.getInstruments(activeLabId)
       ]);
       setManufacturers(mfgData);
       setModels(modelData);
@@ -46,7 +48,7 @@ export const InstrumentsPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [activeLabId]);
 
   const handleCreateMfg = async (e: React.FormEvent) => {
     e.preventDefault();

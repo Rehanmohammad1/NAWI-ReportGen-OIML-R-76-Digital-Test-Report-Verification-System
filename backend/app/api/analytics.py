@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.models import User, TestSession, ComplianceResult, Instrument, InstrumentModel, Equipment, Report
@@ -10,13 +10,16 @@ from app.models.models import User, TestSession, ComplianceResult, Instrument, I
 router = APIRouter(prefix="/analytics", tags=["Analytics & Dashboard"])
 
 @router.get("/dashboard-summary")
-def get_dashboard_summary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_dashboard_summary(lab_id: Optional[int] = None, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     q_sess = db.query(TestSession)
     q_eq = db.query(Equipment)
 
     if current_user.role != "admin" and current_user.lab_id:
         q_sess = q_sess.filter(TestSession.lab_id == current_user.lab_id)
         q_eq = q_eq.filter(Equipment.lab_id == current_user.lab_id)
+    elif lab_id:
+        q_sess = q_sess.filter(TestSession.lab_id == lab_id)
+        q_eq = q_eq.filter(Equipment.lab_id == lab_id)
 
     total_sessions = q_sess.count()
     draft_count = q_sess.filter(TestSession.status == "draft").count()
@@ -53,13 +56,15 @@ def get_dashboard_summary(db: Session = Depends(get_db), current_user: User = De
     }
 
 @router.get("/failure-patterns")
-def get_failure_patterns(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_failure_patterns(lab_id: Optional[int] = None, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """
     Failure pattern analytics: counts of test procedure failures across all historical sessions.
     """
     comp_query = db.query(ComplianceResult).join(TestSession)
     if current_user.role != "admin" and current_user.lab_id:
         comp_query = comp_query.filter(TestSession.lab_id == current_user.lab_id)
+    elif lab_id:
+        comp_query = comp_query.filter(TestSession.lab_id == lab_id)
 
     failures = comp_query.filter(ComplianceResult.pass_fail == "FAIL").all()
 

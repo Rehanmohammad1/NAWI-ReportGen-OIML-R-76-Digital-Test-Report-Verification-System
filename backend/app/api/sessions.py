@@ -26,14 +26,17 @@ router = APIRouter(prefix="/sessions", tags=["Test Sessions"])
 @router.get("")
 def list_test_sessions(
     status_filter: Optional[str] = None,
+    lab_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     query = db.query(TestSession)
 
-    # Row-level scoping: Inspector/Lab Manager/Reviewer see only their laboratory's sessions. Admin sees all.
+    # Row-level scoping: Inspector/Lab Manager/Reviewer see only their laboratory's sessions. Admin can filter by lab_id context.
     if current_user.role != "admin" and current_user.lab_id:
         query = query.filter(TestSession.lab_id == current_user.lab_id)
+    elif lab_id:
+        query = query.filter(TestSession.lab_id == lab_id)
 
     if status_filter:
         query = query.filter(TestSession.status == status_filter)

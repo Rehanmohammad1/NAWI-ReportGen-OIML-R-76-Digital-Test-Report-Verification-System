@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { CheckSquare, AlertTriangle, CheckCircle, XCircle, FileText, CheckCircle2, ShieldCheck, Download, ChevronRight, X } from 'lucide-react';
 
 export const ReviewQueuePage: React.FC = () => {
+  const { activeLabId } = useAuth();
   const [pendingSessions, setPendingSessions] = useState<any[]>([]);
   const [allSessions, setAllSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +17,8 @@ export const ReviewQueuePage: React.FC = () => {
     try {
       setLoading(true);
       const [underReviewData, allData] = await Promise.all([
-        api.getSessions('under_review'),
-        api.getSessions().catch(() => [])
+        api.getSessions('under_review', activeLabId),
+        api.getSessions(undefined, activeLabId).catch(() => [])
       ]);
       setPendingSessions(underReviewData || []);
       setAllSessions(allData || []);
@@ -29,7 +31,7 @@ export const ReviewQueuePage: React.FC = () => {
 
   useEffect(() => {
     loadQueue();
-  }, []);
+  }, [activeLabId]);
 
   const handleReviewAction = async (decision: 'approved' | 'rejected') => {
     if (!selectedSession) return;
